@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import react, { Fragment } from "react";
+import ErrorModal from "./modal/ErrorModal";
+import Header from "./header/Header";
+import ErrorProvider from "./store/ErrorProvider";
+import UserSignUp from "./user/UserSignUp";
+import Meal from "./meal/Meal";
+import UserSignIn from "./user/UserSignIn";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ErrorProvider>
+      <Header />
+      <Router>
+        <Switch>
+          <Route path="/signup" exact>
+            <UserSignUp />
+          </Route>
+          <Route path="/" exact>
+            <Meal />
+          </Route>
+          <Route path="/signin" exact>
+            <UserSignIn />
+          </Route>
+          <Redirect to="/" />
+        </Switch>
+      </Router>
+    </ErrorProvider>
   );
 }
 
