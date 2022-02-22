@@ -1,9 +1,30 @@
+import React, { useContext } from "react";
+import SignedContext from "../store/Sign-Context";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { SignActions } from "../store/AppWideState";
 const Header = () => {
+  const location = useLocation();
+
+  const page = location.pathname === "/signup" ? true : false;
+  console.log(page);
+
+  const isLogged = useSelector((state) => state.isLoggedIn);
+  const dispatch = useDispatch();
+  const ctx = useContext(SignedContext);
+  const history = useHistory();
+
+  const signOutHandler = () => {
+    dispatch(SignActions.signOut());
+    history.push("/signup");
+  };
+
   return (
     <nav className="bg-gray-500 ">
       <div className="flex justify-between px-5 py-2">
         <div className="flex space-x-5 ">
-          <a href="#">
+          <Link to="/">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="w-10 h-10"
@@ -16,17 +37,34 @@ const Header = () => {
                 clipRule="evenodd"
               />
             </svg>
-          </a>
+          </Link>
           <h1 className="flex items-center text-xl justify">Harmee Meal</h1>
         </div>
         <div className="flex items-center mr-10 space-x-5 justify-items-center">
-          <a
-            href="/signup"
-            className="px-2 py-0 bg-blue-400 rounded-lg h-7 hover:bg-blue-600"
-          >
-            Sign Up
-          </a>
-          <button className="px-2 bg-red-400 rounded-lg h-7">Sign In</button>
+          {!isLogged && location.pathname !== "/signup" && (
+            <Link
+              to="/signup"
+              className="px-2 py-0 bg-blue-400 rounded-lg h-7 hover:bg-blue-600"
+            >
+              Sign Up
+            </Link>
+          )}
+          {!isLogged && location.pathname !== "/signin" && (
+            <Link
+              to="/signin"
+              className="px-2 bg-red-400 rounded-lg h-7 hover:bg-red-500"
+            >
+              Sign In
+            </Link>
+          )}
+          {isLogged && (
+            <button
+              onClick={signOutHandler}
+              className="px-2 bg-red-400 rounded-lg h-7 hover:bg-red-500"
+            >
+              Sign Out
+            </button>
+          )}
         </div>
       </div>
     </nav>

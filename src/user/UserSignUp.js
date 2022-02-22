@@ -1,43 +1,64 @@
-import { react, useRef, Fragment, useContext } from "react";
+import { useRef, Fragment, useContext } from "react";
 import ErrorModal from "../modal/ErrorModal";
 import UserInputComp from "./UserInputComp";
-import axios from "axios";
 import ErrorContext from "../store/Error-Context";
-import { data } from "autoprefixer";
+import { Link, useLocation } from "react-router-dom";
+import useHttp from "../hooks/Use-Http";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { SignActions } from "../store/AppWideState";
+import ImageUploader from "../utils/ImageUploader";
 const UserSignUp = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const { sendRequest } = useHttp();
+
   const errCtx = useContext(ErrorContext);
+
+  const location = useLocation();
+  console.log(location.pathname);
+
   const nameInput = useRef();
   const emailInput = useRef();
   const passwordInput = useRef();
 
+  const applyData = (val) => {
+    if (val) {
+      console.log(val);
+      dispatch(
+        SignActions.signUp({
+          token: val.token,
+          userId: val.theUser.userId,
+        })
+      );
+
+      if (errCtx.errorMessage === "") {
+        nameInput.current.value = "";
+        emailInput.current.value = "";
+        passwordInput.current.value = "";
+      }
+
+      history.push("/mealsDemo");
+    }
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
-
     const userName = nameInput.current.value;
     const email = emailInput.current.value;
     const password = passwordInput.current.value;
+
+    sendRequest(
+      {
+        method: "POST",
+        url: "http://localhost:8000/api/users/signup",
+        data: { userName, email, password },
+      },
+      applyData
+    );
+
     console.log(userName, password, email);
-    let val;
-    try {
-      val = await axios.post("http://localhost:8000/api/users/signup", {
-        userName,
-        email,
-        password,
-      });
-      //   console.log(val.ok);
-      //   if (!val.ok) {
-      //     throw new Error(val.message, 400);
-      //   }
-    } catch (err) {
-      console.log(err.response.data.message);
-      const errMsg = err.response.data.message;
-      errCtx.setErrorMessage(errMsg);
-    }
-    if (errCtx.errorMessage === "") {
-      nameInput.current.value = "";
-      emailInput.current.value = "";
-      passwordInput.current.value = "";
-    }
   };
 
   return (
@@ -87,6 +108,7 @@ const UserSignUp = () => {
             />
           </div>
         </div>
+        <ImageUploader />
 
         <button
           onClick={submitHandler}
@@ -95,6 +117,13 @@ const UserSignUp = () => {
         >
           Sign Up
         </button>
+
+        <Link
+          className="ml-4 text-blue-400 hover:text-red-300"
+          to="/forgotPassword"
+        >
+          Forgot Password ?
+        </Link>
       </div>
     </Fragment>
   );

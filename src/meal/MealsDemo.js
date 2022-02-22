@@ -12,9 +12,12 @@ import ErrorModal from "../modal/ErrorModal";
 import SignedContext from "../store/Sign-Context";
 import Spinner from "../header/Spinner";
 import axios from "axios";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Cookies from "js-cookie";
 
-const Meal = () => {
+const MealsDemo = () => {
   const ctx = useContext(ErrorContext);
+  const history = useHistory();
 
   const [Meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,23 +25,25 @@ const Meal = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        setIsLoading(true);
-        const Req = await axios.get("http://localhost:8000/api/meals");
-        console.log(Req);
+        // ${localStorage.getItem("token")}
+        const Req = await axios({
+          method: "GET",
+          url: "http://localhost:8000/api/meals",
+          headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+        });
         setMeals(Req.data.meal);
-        setIsLoading(false);
       } catch (err) {
         console.log(err.response.data.message);
         ctx.setErrorMessage(err.response.data.message);
       }
     };
+
     getData();
   }, []);
 
   return (
     <section>
       {ctx.isError && <ErrorModal />}
-      {isLoading && <Spinner />}
       {!isLoading &&
         Meals.map((item) => {
           return (
@@ -53,4 +58,4 @@ const Meal = () => {
     </section>
   );
 };
-export default Meal;
+export default MealsDemo;
