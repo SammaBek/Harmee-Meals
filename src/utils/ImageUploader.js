@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 
-const ImageUploader = () => {
+const ImageUploader = (props) => {
   const filePickerRef = useRef();
   const [file, setFile] = useState("");
   const [isValid, setIsValid] = useState(false);
@@ -20,13 +20,19 @@ const ImageUploader = () => {
   }, [file]);
 
   const pickedHandler = (event) => {
+    let pickedFile, valid;
     if (event.target.files && event.target.files.length === 1) {
-      const pickedFile = event.target.files[0];
+      pickedFile = event.target.files[0];
       setFile(pickedFile);
       setIsValid(true);
+      valid = isValid;
     } else {
       setIsValid(false);
+      valid = false;
     }
+
+    props.onGetImage(pickedFile, valid);
+    console.log(pickedFile);
   };
 
   const pickImageHandler = () => {

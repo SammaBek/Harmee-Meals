@@ -1,4 +1,4 @@
-import { useRef, Fragment, useContext } from "react";
+import { useRef, Fragment, useContext, useState } from "react";
 import ErrorModal from "../modal/ErrorModal";
 import UserInputComp from "./UserInputComp";
 import ErrorContext from "../store/Error-Context";
@@ -8,9 +8,11 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { SignActions } from "../store/AppWideState";
 import ImageUploader from "../utils/ImageUploader";
+
 const UserSignUp = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const [img, setImg] = useState();
 
   const { sendRequest } = useHttp();
 
@@ -22,6 +24,11 @@ const UserSignUp = () => {
   const nameInput = useRef();
   const emailInput = useRef();
   const passwordInput = useRef();
+
+  const getImage = (image, valid) => {
+    setImg(image);
+    console.log(img);
+  };
 
   const applyData = (val) => {
     if (val) {
@@ -49,11 +56,19 @@ const UserSignUp = () => {
     const email = emailInput.current.value;
     const password = passwordInput.current.value;
 
+    const form = new FormData();
+    form.append("userName", nameInput.current.value);
+    form.append("email", emailInput.current.value);
+    form.append("password", passwordInput.current.value);
+    form.append("image", img);
+
+    console.log(img);
+
     sendRequest(
       {
         method: "POST",
         url: "http://localhost:8000/api/users/signup",
-        data: { userName, email, password },
+        data: form,
       },
       applyData
     );
@@ -108,7 +123,7 @@ const UserSignUp = () => {
             />
           </div>
         </div>
-        <ImageUploader />
+        <ImageUploader onGetImage={getImage} />
 
         <button
           onClick={submitHandler}
