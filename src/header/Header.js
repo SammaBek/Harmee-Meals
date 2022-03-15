@@ -3,14 +3,16 @@ import SignedContext from "../store/Sign-Context";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { SignActions } from "../store/AppWideState";
+import { SignActions } from "../store/SignIn-slice";
 const Header = () => {
   const location = useLocation();
 
   const page = location.pathname === "/signup" ? true : false;
   console.log(page);
 
-  const isLogged = useSelector((state) => state.isLoggedIn);
+  const isLogged = localStorage.getItem("logged");
+  const img = useSelector((state) => state.sign.userImage);
+
   const dispatch = useDispatch();
   const ctx = useContext(SignedContext);
   const history = useHistory();
@@ -21,53 +23,66 @@ const Header = () => {
   };
 
   return (
-    <nav className="bg-gray-500 ">
-      <div className="flex justify-between px-5 py-2">
-        <div className="flex space-x-5 ">
-          <Link to="/">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-10 h-10"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M6 3a1 1 0 011-1h.01a1 1 0 010 2H7a1 1 0 01-1-1zm2 3a1 1 0 00-2 0v1a2 2 0 00-2 2v1a2 2 0 00-2 2v.683a3.7 3.7 0 011.055.485 1.704 1.704 0 001.89 0 3.704 3.704 0 014.11 0 1.704 1.704 0 001.89 0 3.704 3.704 0 014.11 0 1.704 1.704 0 001.89 0A3.7 3.7 0 0118 12.683V12a2 2 0 00-2-2V9a2 2 0 00-2-2V6a1 1 0 10-2 0v1h-1V6a1 1 0 10-2 0v1H8V6zm10 8.868a3.704 3.704 0 01-4.055-.036 1.704 1.704 0 00-1.89 0 3.704 3.704 0 01-4.11 0 1.704 1.704 0 00-1.89 0A3.704 3.704 0 012 14.868V17a1 1 0 001 1h14a1 1 0 001-1v-2.132zM9 3a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm3 0a1 1 0 011-1h.01a1 1 0 110 2H13a1 1 0 01-1-1z"
-                clipRule="evenodd"
+    <div className=" bg-gradient-to-r from-gray-300 via-purple-500 to-pink-300">
+      <nav>
+        <div className="flex justify-between px-5 py-2">
+          <div className="flex space-x-5 ">
+            <Link to="/">
+              <svg
+                className="w-12 h-12 "
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 0 24 24"
+                width="24px"
+                fill="#60a5fa"
+              >
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path d="M16 6v8h3v8h2V2c-2.76 0-5 2.24-5 4zm-5 3H9V2H7v7H5V2H3v7c0 2.21 1.79 4 4 4v9h2v-9c2.21 0 4-1.79 4-4V2h-2v7z" />
+              </svg>
+            </Link>
+            <h1 className="flex items-center text-2xl text-blue-400 justify">
+              Harmee Meal
+            </h1>
+          </div>
+          <div className="flex items-center mr-10 space-x-5 justify-items-center">
+            {!isLogged && location.pathname !== "/signup" && (
+              <Link
+                to="/signup"
+                className="px-2 py-0 bg-blue-400 rounded-lg h-7 hover:bg-blue-600"
+              >
+                Sign Up
+              </Link>
+            )}
+            {!isLogged && location.pathname !== "/signin" && (
+              <Link
+                to="/signin"
+                className="px-2 bg-red-400 rounded-lg h-7 hover:bg-red-500"
+              >
+                Sign In
+              </Link>
+            )}
+
+            {isLogged && (
+              <img
+                className="w-16 h-16 rounded-full"
+                src={`http://localhost:8000/${localStorage.getItem(
+                  "userImage"
+                )}`}
+                alt="Pic"
               />
-            </svg>
-          </Link>
-          <h1 className="flex items-center text-xl justify">Harmee Meal</h1>
+            )}
+            {isLogged && (
+              <button
+                onClick={signOutHandler}
+                className="px-2 bg-red-400 rounded-lg h-7 hover:bg-red-500"
+              >
+                Sign Out
+              </button>
+            )}
+          </div>
         </div>
-        <div className="flex items-center mr-10 space-x-5 justify-items-center">
-          {!isLogged && location.pathname !== "/signup" && (
-            <Link
-              to="/signup"
-              className="px-2 py-0 bg-blue-400 rounded-lg h-7 hover:bg-blue-600"
-            >
-              Sign Up
-            </Link>
-          )}
-          {!isLogged && location.pathname !== "/signin" && (
-            <Link
-              to="/signin"
-              className="px-2 bg-red-400 rounded-lg h-7 hover:bg-red-500"
-            >
-              Sign In
-            </Link>
-          )}
-          {isLogged && (
-            <button
-              onClick={signOutHandler}
-              className="px-2 bg-red-400 rounded-lg h-7 hover:bg-red-500"
-            >
-              Sign Out
-            </button>
-          )}
-        </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 };
 

@@ -15,12 +15,14 @@ import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Cookies from "js-cookie";
 
-const MealsDemo = () => {
+const MealsDemo = (props) => {
   const ctx = useContext(ErrorContext);
   const history = useHistory();
 
   const [Meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  console.log(props.onGetImage);
 
   useEffect(() => {
     const getData = async () => {
@@ -52,6 +54,12 @@ const MealsDemo = () => {
               name={item.name}
               price={item.price}
               description={item.description}
+              type={item.productType}
+              deadline={item.productDeadline}
+              catagory={item.productCatagory}
+              image={item.image}
+              postedBy={item.owner.userName}
+              prodId={item.id}
             />
           );
         })}

@@ -8,7 +8,7 @@ const useHttp = () => {
   const errCtx = useContext(ErrorContext);
   let user;
   const sendRequest = async (reqConfig, applyData) => {
-    console.log(reqConfig);
+    console.log(reqConfig.data);
     try {
       user = await axios({
         method: reqConfig.method ? reqConfig.method : "GET",

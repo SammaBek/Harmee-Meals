@@ -1,10 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
+import img from "../img/img.jpeg";
 
 const ImageUploader = (props) => {
   const filePickerRef = useRef();
   const [file, setFile] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  let pickedFile, valid;
 
   useEffect(() => {
     if (!file) {
@@ -20,19 +22,21 @@ const ImageUploader = (props) => {
   }, [file]);
 
   const pickedHandler = (event) => {
-    let pickedFile, valid;
+    event.preventDefault();
+
+    console.log(event.target.files.length, event.target.files);
     if (event.target.files && event.target.files.length === 1) {
       pickedFile = event.target.files[0];
       setFile(pickedFile);
       setIsValid(true);
-      valid = isValid;
+      valid = true;
     } else {
       setIsValid(false);
       valid = false;
     }
 
     props.onGetImage(pickedFile, valid);
-    console.log(pickedFile);
+    console.log(pickedFile, valid);
   };
 
   const pickImageHandler = () => {
@@ -52,12 +56,15 @@ const ImageUploader = (props) => {
 
         <img
           alt="preview"
-          src={`${imageUrl ? imageUrl : ""}`}
-          className="p-8 border-2"
+          src={`${imageUrl ? imageUrl : props.img}`}
+          className={`p-2 border-2 ${
+            imageUrl ? `${props.cssClassAfter}` : `${props.cssClass}`
+          }`}
         />
         <button
+          type="button"
           onClick={pickImageHandler}
-          className="h-8 mb-5 ml-5 bg-red-400 rounded-lg w-28 hover:bg-red-500"
+          className="h-8 mb-5 ml-5 bg-blue-500 rounded-lg w-28 hover:bg-blue-600"
         >
           Add Image
         </button>

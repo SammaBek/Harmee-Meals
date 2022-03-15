@@ -5,13 +5,14 @@ import SignedContext from "../store/Sign-Context";
 import ErrorContext from "../store/Error-Context";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useSelector, useDispatch } from "react-redux";
-import { SignActions } from "../store/AppWideState";
+import { SignActions } from "../store/SignIn-slice";
 import Cookies from "js-cookie";
 import useHttp from "../hooks/Use-Http";
+import axios from "axios";
 
 const UserSignIn = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.sign.isLoggedIn);
   const ctx = useContext(SignedContext);
   const errCtx = useContext(ErrorContext);
   const inputEmail = useRef();
@@ -24,17 +25,25 @@ const UserSignIn = () => {
   const applyData = (user) => {
     console.log(isLoggedIn);
     console.log(user);
-    if (user) {
-      dispatch(
-        SignActions.signIn({
-          token: user.token,
-          userId: user.theUser.userId,
-        })
-      );
 
+    if (user) {
+      try {
+        dispatch(
+          SignActions.signIn({
+            token: user.token,
+            userId: user.theUser.id,
+            userImage: user.theUser.image,
+            userName: user.theUser.userName,
+            userEmail: user.theUser.email,
+          })
+        );
+      } catch (err) {
+        console.log(err);
+      }
+      console.log(isLoggedIn);
       inputPassword.current.value = "";
       inputEmail.current.value = "";
-      history.push("/mealsDemo");
+      history.push("/userpage");
     }
   };
 
@@ -55,44 +64,54 @@ const UserSignIn = () => {
   return (
     <Fragment>
       {errCtx.isError && <ErrorModal />}
-      <div className="h-auto max-w-md mx-auto mt-10 rounded-lg shadow-xl bg-blue-50">
-        <h1 className="py-8 text-xl text-center">Welcome To Sign In page</h1>
-        <div></div>
+      <div className="h-auto max-w-md mx-auto mt-10 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+        <div className="py-8 mt-8 text-center">
+          <span className="text-4xl text-white">Welcome to </span>{" "}
+          <span className="text-4xl text-green-400 ">Harmee Meals</span>
+        </div>
 
-        <div className="flex mb-10 space-x-5">
-          <div className="grid grid-flow-row ml-10 space-y-2">
-            <label>Email</label>
-            <label>Password</label>
+        <div className="grid grid-flow-row p-8 mx-auto">
+          <div>
+            <label className="text-white ">Email address</label>
           </div>
 
-          <div className="grid grid-flow-row space-y-2">
+          <div>
             <UserInputComp
               ref={inputEmail}
               input={{
                 type: "email",
                 placeholder: "Email",
-                className: "w-40 px-3 rounded-lg ",
+                className:
+                  "px-3 py-2 rounded-md  mt-1 border-2 w-full border border-gray-300",
               }}
             />
+          </div>
 
+          <div>
+            <label className="text-white ">Password</label>
+          </div>
+          <div>
             <UserInputComp
               ref={inputPassword}
               input={{
                 type: "password",
                 placeholder: "Password",
-                className: "w-40 px-3 rounded-lg",
+                className:
+                  "px-3 py-2 rounded-md border-2 mt-1 w-full border border-gray-300 focus:ring-1 focus:indigo-500",
               }}
             />
           </div>
-        </div>
 
-        <button
-          onClick={submitHandler}
-          type="submit"
-          className="px-4 py-1 mb-10 ml-10 bg-red-400 rounded-lg hover:bg-red-500"
-        >
-          Sign In
-        </button>
+          <div>
+            <button
+              onClick={submitHandler}
+              type="submit"
+              className="px-8 py-1 mt-4 mb-10 ml-10 text-lg text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
+            >
+              Sign In
+            </button>
+          </div>
+        </div>
       </div>
     </Fragment>
   );
