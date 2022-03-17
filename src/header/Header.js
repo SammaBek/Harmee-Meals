@@ -11,6 +11,7 @@ const Header = () => {
   console.log(page);
 
   const isLogged = localStorage.getItem("logged");
+  console.log(isLogged);
   const img = useSelector((state) => state.sign.userImage);
 
   const dispatch = useDispatch();
@@ -20,6 +21,10 @@ const Header = () => {
   const signOutHandler = () => {
     dispatch(SignActions.signOut());
     history.push("/signup");
+  };
+
+  const imgClickHandler = () => {
+    history.push("/userpage");
   };
 
   return (
@@ -45,7 +50,7 @@ const Header = () => {
             </h1>
           </div>
           <div className="flex items-center mr-10 space-x-5 justify-items-center">
-            {!isLogged && location.pathname !== "/signup" && (
+            {isLogged === "false" && location.pathname !== "/signup" && (
               <Link
                 to="/signup"
                 className="px-2 py-0 bg-blue-400 rounded-lg h-7 hover:bg-blue-600"
@@ -53,7 +58,7 @@ const Header = () => {
                 Sign Up
               </Link>
             )}
-            {!isLogged && location.pathname !== "/signin" && (
+            {isLogged === "false" && location.pathname !== "/signin" && (
               <Link
                 to="/signin"
                 className="px-2 bg-red-400 rounded-lg h-7 hover:bg-red-500"
@@ -62,8 +67,9 @@ const Header = () => {
               </Link>
             )}
 
-            {isLogged && (
+            {isLogged === "true" && (
               <img
+                onClick={imgClickHandler}
                 className="w-16 h-16 rounded-full"
                 src={`http://localhost:8000/${localStorage.getItem(
                   "userImage"
@@ -71,7 +77,7 @@ const Header = () => {
                 alt="Pic"
               />
             )}
-            {isLogged && (
+            {isLogged === "true" && (
               <button
                 onClick={signOutHandler}
                 className="px-2 bg-red-400 rounded-lg h-7 hover:bg-red-500"

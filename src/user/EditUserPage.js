@@ -8,7 +8,7 @@ const EditUserPage = (props) => {
     <Fragment>
       <div className="grid grid-flow-row translate-y-16 h-28">
         <div className="flex gap-x-3">
-          <label className="text-blue-400 ">Name</label>
+          <label className="text-gray-600 ">Name</label>
           <input
             className="w-40 border-2 border-blue-100 rounded-md h-7"
             defaultValue={props.userName}
@@ -17,7 +17,7 @@ const EditUserPage = (props) => {
         </div>
 
         <div className="flex gap-x-3">
-          <p className="text-blue-400 ">Email</p>
+          <p className="text-gray-600 ">Email</p>
           <input
             type="email"
             ref={props.emailInput}

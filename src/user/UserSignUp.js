@@ -49,7 +49,7 @@ const UserSignUp = () => {
         passwordInput.current.value = "";
       }
 
-      history.push("/mealsDemo");
+      history.push("/userpage");
     }
   };
 

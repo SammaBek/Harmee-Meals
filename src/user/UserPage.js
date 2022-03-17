@@ -91,22 +91,21 @@ const UserPage = () => {
     );
   };
   return (
-    <div className="absolute inset-0 bg-slate-200">
-      <Header />
+    <div className=" bg-slate-200">
       <div className="absolute max-w-4xl mx-auto mt-24 bg-indigo-500 shadow-lg inset-3 rounded-2xl ">
         <div className="absolute inset-0 max-w-4xl mx-auto mt-64 bg-white h-96"></div>
-        <div className="absolute max-w-2xl mx-auto mt-3 shadow-2xl inset-16 bg-slate-100 rounded-2xl">
+        <div className="absolute max-w-2xl mx-auto mt-3 shadow-2xl inset-16 bg-gradient-to-r from-green-100 via-indigo-200 to-pink-200 rounded-2xl">
           <UserPageNav />
           <div className="flex mt-5 gap-x-6">
-            <div className="grid grid-flow-col mt-5 ml-6 shadow-xl border-1 bg-slate-100 h-60 w-60 rounded-xl">
+            <div className="grid grid-flow-col mt-5 ml-6 shadow-xl border-1 bg-gradient-to-r h-60 w-60 rounded-xl">
               <div className="">
                 <img
-                  className="w-32 h-32 mt-3 rounded-full"
+                  className="mt-3 ml-2 rounded-full shadow-xl w-36 h-36"
                   src={`http://localhost:8000/${img ? img : imgs}`}
                   alt="pic"
                 ></img>
 
-                <p className="text-lg text-blue-400 ">{userName}</p>
+                <p className="ml-2 text-lg text-blue-400">{userName}</p>
               </div>
             </div>
 

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 const initialSignInState = {
-  isLoggedIn: false,
+  isLoggedIn: null,
   token: null,
   userId: null,
   userImage: null,
@@ -38,7 +38,7 @@ const Sign = createSlice({
     signOut(state) {
       Cookies.remove("token");
 
-      state.isLoggedIn = false;
+      state.isLoggedIn = null;
       state.token = null;
       state.userId = null;
       state.userImage = null;

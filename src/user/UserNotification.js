@@ -16,7 +16,7 @@ const UserNotification = () => {
     console.log("hello");
   };
 
-  const userId = useSelector((state) => state.sign.userId);
+  const userId = localStorage.getItem("userId");
   console.log(userId);
   let arr;
   useEffect(() => {
@@ -25,7 +25,7 @@ const UserNotification = () => {
         // ${localStorage.getItem("token")}
         const Req = await axios({
           method: "GET",
-          url: `http://localhost:8000/api/users/${id}`,
+          url: `http://localhost:8000/api/users/${userId}`,
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },
         });
         setProds(Req.data.user);

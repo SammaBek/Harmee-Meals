@@ -35,33 +35,6 @@ function App() {
   const dispatch = useDispatch();
   let user;
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        // ${localStorage.getItem("token")}
-        const user = await axios({
-          method: "GET",
-          url: `http://localhost:8000/api/users/${Cookies.get("userId")}`,
-          headers: { Authorization: `Bearer ${Cookies.get("token")}` },
-        });
-
-        dispatch(
-          SignActions.signIn({
-            token: user.token,
-            userId: user.theUser.id,
-            userImage: user.theUser.image,
-            userName: user.theUser.userName,
-            userEmail: user.theUser.email,
-          })
-        );
-      } catch (err) {
-        console.log(err.response.data.message);
-      }
-    };
-
-    getData();
-  }, []);
-
   console.log("FIRST TIMER");
   return (
     <ErrorProvider>
