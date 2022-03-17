@@ -10,7 +10,7 @@ const Header = () => {
   const page = location.pathname === "/signup" ? true : false;
   console.log(page);
 
-  const isLogged = localStorage.getItem("logged");
+  const isLogged = useSelector((state) => state.sign.isLoggedIn);
   console.log(isLogged);
   const img = useSelector((state) => state.sign.userImage);
 
@@ -50,7 +50,7 @@ const Header = () => {
             </h1>
           </div>
           <div className="flex items-center mr-10 space-x-5 justify-items-center">
-            {isLogged === "false" && location.pathname !== "/signup" && (
+            {!isLogged && location.pathname !== "/signup" && (
               <Link
                 to="/signup"
                 className="px-2 py-0 bg-blue-400 rounded-lg h-7 hover:bg-blue-600"
@@ -58,7 +58,7 @@ const Header = () => {
                 Sign Up
               </Link>
             )}
-            {isLogged === "false" && location.pathname !== "/signin" && (
+            {!isLogged && location.pathname !== "/signin" && (
               <Link
                 to="/signin"
                 className="px-2 bg-red-400 rounded-lg h-7 hover:bg-red-500"
@@ -67,17 +67,15 @@ const Header = () => {
               </Link>
             )}
 
-            {isLogged === "true" && (
+            {isLogged && (
               <img
                 onClick={imgClickHandler}
                 className="w-16 h-16 rounded-full"
-                src={`http://localhost:8000/${localStorage.getItem(
-                  "userImage"
-                )}`}
+                src={`http://localhost:8000/${img}`}
                 alt="Pic"
               />
             )}
-            {isLogged === "true" && (
+            {isLogged && (
               <button
                 onClick={signOutHandler}
                 className="px-2 bg-red-400 rounded-lg h-7 hover:bg-red-500"

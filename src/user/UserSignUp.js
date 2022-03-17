@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { SignActions } from "../store/SignIn-slice";
 import ImageUploader from "../utils/ImageUploader";
 import img1 from "../img/img.jpeg";
+import img2 from "../img/shop.png";
 
 const UserSignUp = () => {
   const history = useHistory();
@@ -83,20 +84,15 @@ const UserSignUp = () => {
     <div className="flex bg-gradient-to-r from-cyan-300 via-blue-500 to-cyan-500">
       {errCtx.isError && <ErrorModal />}
 
-      <div className="lg:mt-40 lg:ml-8 xl:w-1/2 lg:w-2/5 xl:mt-28 md:w-1/2 md:ml-4 md:mt-24">
-        <h1 className="absolute text-blue-400 "> WELCOME TO HARMEE MEALS</h1>
-        <img
-          className="rounded-lg "
-          src="https://i2.wp.com/www.alltherooms.com/blog/wp-content/uploads/2018/12/Feature-10-Ethiopian-Food-Dishes-You-Have-to-Try-By-AS-Food-studio.jpg?fit=1000%2C667&ssl=1"
-          alt="pic"
-        ></img>
+      <div className="lg:mt-36 lg:ml-8 xl:w-1/2 lg:w-2/5 xl:mt-24 md:w-1/2 md:ml-4 md:mt-24">
+        <img className="rounded-lg " src={img2} alt="pic"></img>
       </div>
-      <div className="h-auto text-white rounded-lg shadow-2xl lg:w-6/12 lg:mt-10 lg:mb-10 lg:ml-10 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 xl:mr-10 md:1/2 md:ml-5 md:mr-4 md:w-1/2 md:mt-10 md:mb-7">
-        <h2 className="text-center text-white lg:text-3xl lg:mt-3 py-7 md:text-2xl md:mt-1 md:text-green-500 lg:text-yellow-400 xl:text-red-400">
+      <div className="h-auto text-white rounded-lg shadow-2xl lg:w-6/12 lg:mt-5 lg:mb-5 lg:ml-10 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 xl:mr-10 md:1/2 md:ml-5 md:mr-4 md:w-1/2 md:mt-10 md:mb-7">
+        <div className="text-center text-white lg:text-3xl lg:mt-3 py-7 md:text-2xl md:mt-1 md:text-green-500 lg:text-yellow-400 xl:text-red-400">
           {" "}
           Welcome To Sign Up Page
-        </h2>
-        <div className="w-1/2 mb-4 ml-10 md:mb-2">
+        </div>
+        <div className="w-1/2 mb-2 ml-10 md:mb-2">
           <div>
             <label className="mt-2 lg:text-lg md:text-base">Name</label>
           </div>
@@ -108,7 +104,7 @@ const UserSignUp = () => {
                 type: "text",
                 placeholder: "Name",
                 className:
-                  "px-3 lg:py-2 mt-1 rounded-lg  text-black bg-transparent  border-2 border-red-200 w-full md:py-0",
+                  "px-3 lg:py-2 mt-1 rounded-lg  bg-transparent  border-2 border-red-200 w-full md:py-0 text-gray-100",
               }}
             />
           </div>
@@ -124,7 +120,7 @@ const UserSignUp = () => {
                 type: "email",
                 placeholder: "Email",
                 className:
-                  "px-3 lg:py-2 mt-1 rounded-lg text-black bg-transparent border-2 border-red-200 w-full md:py-0",
+                  "px-3 lg:py-2 mt-1 rounded-lg  bg-transparent border-2 border-red-200 w-full md:py-0 text-gray-100",
               }}
             />
           </div>
@@ -140,7 +136,7 @@ const UserSignUp = () => {
                 type: "password",
                 placeholder: "Password",
                 className:
-                  "px-3 lg:py-2 mt-1 rounded-lg  text-black  bg-transparent border-2 border-red-200 w-full md:py-0",
+                  "px-3 lg:py-2 mt-1 rounded-lg  bg-transparent border-2 border-red-200 w-full md:py-0 text-gray-100",
               }}
             />
           </div>
@@ -155,7 +151,7 @@ const UserSignUp = () => {
         <button
           onClick={submitHandler}
           type="submit"
-          className="px-4 py-1 mb-10 ml-10 bg-blue-500 rounded-lg hover:bg-blue-600 "
+          className="px-4 py-1 mb-5 ml-10 bg-blue-500 rounded-lg hover:bg-blue-600 "
         >
           Sign Up
         </button>

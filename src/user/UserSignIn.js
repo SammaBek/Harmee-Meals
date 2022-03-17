@@ -64,52 +64,54 @@ const UserSignIn = () => {
   return (
     <Fragment>
       {errCtx.isError && <ErrorModal />}
-      <div className="h-auto max-w-md mx-auto mt-10 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-        <div className="py-8 mt-8 text-center">
-          <span className="text-4xl text-white">Welcome to </span>{" "}
-          <span className="text-4xl text-green-400 ">Harmee Meals</span>
-        </div>
-
-        <div className="grid grid-flow-row p-8 mx-auto">
-          <div>
-            <label className="text-white ">Email address</label>
+      <div className="grid h-screen bg-gradient-to-r from-green-100 via-indigo-200 to-pink-200">
+        <div className="w-1/3 mx-auto mt-20 h-1/2 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+          <div className="py-8 mt-4 text-center">
+            <span className="text-4xl text-white">Welcome to </span>{" "}
+            <span className="text-4xl text-green-400 ">Gabaa Auction</span>
           </div>
 
-          <div>
-            <UserInputComp
-              ref={inputEmail}
-              input={{
-                type: "email",
-                placeholder: "Email",
-                className:
-                  "px-3 py-2 rounded-md  mt-1 border-2 w-full border border-gray-300",
-              }}
-            />
-          </div>
+          <div className="grid w-2/3 grid-flow-row ml-6">
+            <div>
+              <label className="text-white ">Email address</label>
+            </div>
 
-          <div>
-            <label className="text-white ">Password</label>
-          </div>
-          <div>
-            <UserInputComp
-              ref={inputPassword}
-              input={{
-                type: "password",
-                placeholder: "Password",
-                className:
-                  "px-3 py-2 rounded-md border-2 mt-1 w-full border border-gray-300 focus:ring-1 focus:indigo-500",
-              }}
-            />
-          </div>
+            <div>
+              <UserInputComp
+                ref={inputEmail}
+                input={{
+                  type: "email",
+                  placeholder: "Email",
+                  className:
+                    "px-3 py-2 rounded-md  mt-1 border-2 w-full border border-gray-300 bg-transparent text-gray-100",
+                }}
+              />
+            </div>
 
-          <div>
-            <button
-              onClick={submitHandler}
-              type="submit"
-              className="px-8 py-1 mt-4 mb-10 ml-10 text-lg text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
-            >
-              Sign In
-            </button>
+            <div>
+              <label className="text-white ">Password</label>
+            </div>
+            <div>
+              <UserInputComp
+                ref={inputPassword}
+                input={{
+                  type: "password",
+                  placeholder: "Password",
+                  className:
+                    "px-3 py-2 rounded-md border-2 mt-1 w-full border border-gray-300 focus:ring-1 focus:indigo-500 bg-transparent text-gray-100",
+                }}
+              />
+            </div>
+
+            <div>
+              <button
+                onClick={submitHandler}
+                type="submit"
+                className="px-8 py-1 mt-4 mb-6 ml-10 text-lg text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
+              >
+                Sign In
+              </button>
+            </div>
           </div>
         </div>
       </div>

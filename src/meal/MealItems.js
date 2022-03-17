@@ -8,10 +8,14 @@ const MealItems = (props) => {
   const history = useHistory();
   const Dispatch = useDispatch();
   const userId = useSelector((state) => state.sign.userId);
-  const [show, setShow] = useState(false);
+  const Show = useSelector((state) => state.sign.show);
+  const [sh, setSh] = useState(false);
   console.log(userId);
+  const make = () => {
+    setSh(false);
+  };
+
   const AddHandler = (event) => {
-    setShow(true);
     event.preventDefault();
     Dispatch(
       SignActions.setBid({
@@ -19,13 +23,16 @@ const MealItems = (props) => {
       })
     );
 
+    Dispatch(SignActions.setShow({ show: true }));
+    setSh(true);
+
     // history.push("/user/fillauction");
   };
 
   return (
     <Fragment>
       <div className="grid grid-cols-2">
-        <section className="grid w-full grid-cols-2 gap-6 py-4 mt-5 mb-3 ml-4 rounded-lg shadow-2xl h-80 bg-red-50 ">
+        <section className="grid w-full grid-cols-2 gap-6 py-4 mt-5 mb-3 ml-4 rounded-lg shadow-2xl h-80 bg-gradient-to-r from-green-100 via-indigo-200 to-pink-200 ">
           <div>
             <img
               className="object-fill mx-auto rounded-md h-72"
@@ -33,7 +40,7 @@ const MealItems = (props) => {
               alt="pic"
             ></img>
           </div>
-          <div className="grid grid-flow-row text-lg">
+          <div className="grid grid-flow-row text-md">
             <div className="flex gap-5">
               <div>
                 <label>Name:</label>
@@ -105,10 +112,11 @@ const MealItems = (props) => {
           + ADD
         </button> */}
         </section>
-        {show && (
+        {Show && sh && (
           <FillAuction
             prodImage={localStorage.getItem("userId")}
             prodId={props.prodId}
+            onMake={make}
           />
         )}
       </div>

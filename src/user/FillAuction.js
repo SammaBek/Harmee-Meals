@@ -1,5 +1,5 @@
 import { SignActions } from "../store/SignIn-slice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useHttp from "../hooks/Use-Http";
 import { useRef } from "react";
 import Cookies from "js-cookie";
@@ -9,15 +9,16 @@ const FillAuction = (props) => {
   const emailInput = useRef();
   const nameInput = useRef();
   const priceInput = useRef();
-  const [show, setShow] = useState(true);
+  const show = useSelector((state) => state.sign.show);
   const prodId = useSelector((state) => state.sign.prodId);
   const prodImage = props.prodImage;
+  const dispatch = useDispatch();
 
   let email, price, product, name;
   const applyData = (user) => {
     console.log(user);
-    setShow(false);
   };
+
   const bidHandler = async (event) => {
     event.preventDefault();
     const form = new FormData();
@@ -50,72 +51,74 @@ const FillAuction = (props) => {
   };
 
   const cancelHandler = () => {
-    setShow(false);
+    dispatch(SignActions.setShow({ show: false }));
+    props.onMake();
   };
 
   return (
-    <form
-      onSubmit={bidHandler}
-      className={`${show ? "" : "hidden"} animate-pulse`}
-    >
-      <div>
-        <h1 className="mx-auto mt-2 text-xl text-center text-blue-400">
-          Make Your Bid
-        </h1>
-      </div>
-      <div className="h-auto ml-20 border-2 rounded-lg shadow-2xl w-96 bg-gradient-to-r from-green-400 to-blue-500">
-        <div className="grid grid-flow-row mt-4 ml-10">
+    <form onSubmit={bidHandler}>
+      {show && (
+        <div>
           <div>
-            <label className="text-gray-100 ">Name</label>
+            <h1 className="mx-auto mt-2 text-xl text-center text-blue-400">
+              Make Your Bid
+            </h1>
           </div>
-          <div>
-            <input
-              value={name}
-              ref={nameInput}
-              className="px-3 py-2 border-2 border-gray-100 rounded-lg w-72 bg-inherit"
-            ></input>
-          </div>
+          <div className="h-auto ml-20 border-2 rounded-lg shadow-2xl w-96 bg-gradient-to-r from-green-400 to-blue-500">
+            <div className="grid grid-flow-row mt-4 ml-10">
+              <div>
+                <label className="text-gray-100 ">Name</label>
+              </div>
+              <div>
+                <input
+                  value={name}
+                  ref={nameInput}
+                  className="px-3 py-2 border-2 border-gray-100 rounded-lg w-72 bg-inherit"
+                ></input>
+              </div>
 
-          <div>
-            <label className="text-gray-100 ">Email</label>
-          </div>
-          <div>
-            <input
-              value={email}
-              ref={emailInput}
-              className="px-3 py-2 border-2 border-gray-100 rounded-lg w-72 bg-inherit"
-            ></input>
-          </div>
+              <div>
+                <label className="text-gray-100 ">Email</label>
+              </div>
+              <div>
+                <input
+                  value={email}
+                  ref={emailInput}
+                  className="px-3 py-2 border-2 border-gray-100 rounded-lg w-72 bg-inherit"
+                ></input>
+              </div>
 
-          <div>
-            <label className="text-gray-100 ">Price</label>
-          </div>
-          <div>
-            <input
-              value={price}
-              ref={priceInput}
-              type="number"
-              className="w-40 px-3 py-2 border-2 border-gray-100 rounded-lg bg-inherit"
-            ></input>
-          </div>
+              <div>
+                <label className="text-gray-100 ">Price</label>
+              </div>
+              <div>
+                <input
+                  value={price}
+                  ref={priceInput}
+                  type="number"
+                  className="w-40 px-3 py-2 border-2 border-gray-100 rounded-lg bg-inherit"
+                ></input>
+              </div>
 
-          <div className="flex gap-6">
-            <button
-              type="submit"
-              className="w-20 py-1 mt-5 mb-2 text-xl text-gray-100 bg-red-400 rounded-lg hover:bg-red-500"
-            >
-              Send
-            </button>
-            <button
-              type="reset"
-              onClick={cancelHandler}
-              className="w-20 py-1 mt-5 mb-2 text-xl text-gray-100 bg-gray-400 rounded-lg hover:bg-gray-500"
-            >
-              Cancel
-            </button>
+              <div className="flex gap-6">
+                <button
+                  type="submit"
+                  className="w-20 py-1 mt-5 mb-2 text-xl text-gray-100 bg-red-400 rounded-lg hover:bg-red-500"
+                >
+                  Send
+                </button>
+                <button
+                  type="reset"
+                  onClick={cancelHandler}
+                  className="w-20 py-1 mt-5 mb-2 text-xl text-gray-100 bg-gray-400 rounded-lg hover:bg-gray-500"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </form>
   );
 };
