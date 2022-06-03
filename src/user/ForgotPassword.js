@@ -1,5 +1,6 @@
 import UserInputComp from "../user/UserInputComp";
 import { useRef, useState } from "react";
+import axios from "axios";
 import useInput from "../hooks/Use-Input";
 const ForgotPassword = () => {
   const {
@@ -10,10 +11,20 @@ const ForgotPassword = () => {
     reset,
   } = useInput();
 
-  const formHandler = (event) => {
+  const formHandler = async (event) => {
     event.preventDefault();
+    try {
+      await axios({
+        method: "PATCH",
+        url: "http://localhost:8000/api/users/forgotPassword",
+        data: { email: enteredEmail },
+      });
+      reset();
+    } catch (err) {
+      console.log(err);
+    }
+
     console.log(enteredEmail);
-    reset();
   };
 
   return (
@@ -23,12 +34,12 @@ const ForgotPassword = () => {
           Forgot Password
         </h1>
         <div className="grid max-w-sm grid-flow-col mt-10">
-          <label className="text-lg ">Email</label>
+          <label className="my-auto text-lg ">Email</label>
           <input
             type="email"
             value={enteredEmail}
             placeholder="Email"
-            className={`px-5 rounded-lg w-50 ml-9 ${
+            className={`px-5 py-2 rounded-lg w-50 ml-9 ${
               focusInp && !enteredEmail ? "bg-red-100" : ""
             }`}
             onChange={clickHandler}

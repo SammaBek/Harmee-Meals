@@ -3,55 +3,101 @@ import ImageUploader from "../utils/ImageUploader";
 import img2 from "../img/img2.jpeg";
 import useHttp from "../hooks/Use-Http";
 import Cookies from "js-cookie";
-import ErrorContext from "../store/Error-Context";
+import Select from "react-select";
+import ElectronicsSpecification from "../productSpecification/ElectronicsSpecification";
+import VehiclesSpecification from "../productSpecification/VehiclesSpecification";
+
 import ErrorModal from "../modal/ErrorModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { ErrorAction } from "../store/Error-Slice";
 const AddMeal = () => {
+  const CatagoriesList = [
+    { value: "Home-Appliance", label: "Home-Appliance" },
+    { value: "Vehicles", label: "Vehicles" },
+    { value: "Electronics", label: "Electronics" },
+    { value: "Clothing", label: "Clothing" },
+    { value: "Home-Furniture", label: "Home-Furniture" },
+    { value: "Gym-Equipment", label: "Gym-Equipment" },
+  ];
+
+  const customStyles = {
+    menu: (provided, state) => ({
+      ...provided,
+      width: state.selectProps.width,
+
+      color: state.selectProps.menuColor,
+    }),
+  };
+  const isError = useSelector((state) => state.error.isError);
   const isLoggedIn = useSelector((state) => state.sign.isLoggedIn);
+  const dispatch = useDispatch();
+  const [specification, setSpecification] = useState();
+  const [specs, setSpecs] = useState();
+  const history = useHistory();
   console.log(isLoggedIn);
-  const ctx = useContext(ErrorContext);
+
   const productInput = useRef();
   const detailInput = useRef();
   const priceInput = useRef();
   const inputDeadline = useRef();
   const [image, setImage] = useState();
-  const [type, setType] = useState();
+  const [status, setStatus] = useState();
   const [catagories, setCatagories] = useState("HomeAppliance");
 
   let header;
   const { sendRequest } = useHttp();
   console.log(catagories);
+
   const submitHandler = async (event) => {
     event.preventDefault();
-    const product = productInput.current.value;
-    const detail = detailInput.current.value;
-    const price = priceInput.current.value;
-    const deadline = inputDeadline.current.value;
-    const form = new FormData();
 
-    form.append("name", productInput.current.value);
-    form.append("description", detailInput.current.value);
-    form.append("price", priceInput.current.value);
-    form.append("productDeadline", inputDeadline.current.value);
-    form.append("productType", type);
-    form.append("productCatagory", catagories);
-    form.append("image", image);
+    if (
+      !productInput.current.value ||
+      !detailInput.current.value ||
+      !priceInput.current.value ||
+      !specs
+    ) {
+      dispatch(
+        ErrorAction.setError({
+          errorMessage: "Some Fields are left unfilled, Please fill",
+        })
+      );
+    } else {
+      const product = productInput.current.value;
+      const detail = detailInput.current.value;
+      const price = priceInput.current.value;
 
-    console.log(product, detail, image, price, deadline, catagories);
+      const form = new FormData();
 
-    sendRequest(
-      {
-        method: "POST",
-        url: "http://localhost:8000/api/meals/addproduct",
-        data: form,
-        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
-      },
-      applyData
-    );
+      form.append("name", productInput.current.value);
+      form.append("description", detailInput.current.value);
+      form.append("price", priceInput.current.value);
+      form.append("productCatagory", catagories);
+      form.append("image", image);
+      form.append("status", status);
+
+      for (var key in specs) {
+        form.append(key, specs[key]);
+      }
+
+      console.log(product, detail, image, price, catagories);
+
+      sendRequest(
+        {
+          method: "POST",
+          url: "http://localhost:8000/api/meals/addproduct",
+          data: form,
+          headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+        },
+        applyData
+      );
+    }
   };
 
   const applyData = (User) => {
     console.log(User);
+    history.push("/userpage");
   };
 
   const getImage = (imgs, valid) => {
@@ -61,184 +107,188 @@ const AddMeal = () => {
   };
 
   const listHandler = (event) => {
-    event.preventDefault();
-    console.log(event.target.value);
-    if (event.target.value) {
-      setCatagories(event.target.value);
+    console.log(event);
+    if (event.value) {
+      setCatagories(event.value);
+      setSpecification(event.value);
     }
   };
 
-  const radioHandler = (event) => {
-    event.preventDefault();
-    console.log(event.target.value);
-    setType(event.target.value);
+  const getSpec = (data) => {
+    console.log(data);
+    setSpecs(data);
   };
+  const statusHandler = (event) => {
+    console.log(event.target.value);
+    setStatus(event.target.value);
+  };
+
   return (
-    <div className="grid bg-gradient-to-r from-cyan-300 via-blue-500 to-cyan-500">
-      {ctx.isError && <ErrorModal />}
+    <div className="grid min-h-screen bg-gradient-to-r from-slate-700 via-blue-500 to-black">
+      {isError && <ErrorModal />}
       <form onSubmit={submitHandler}>
-        <div className="w-7/12 h-auto mx-auto mb-10 w- bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-xl">
-          <h1 className="mt-10 text-3xl text-center text-gray-200 ">
-            GABAA AUCTION ADD YOUR PRODUCTS
+        <div className="h-auto mb-10 w-[80%]">
+          <h1 className="mt-5 text-lg text-center text-white sm:text-xl md:mt-10">
+            ADD YOUR PRODUCT
           </h1>
 
-          <div className="w-full h-auto mx-auto bg-transparent border-1">
-            <div className="grid grid-flow-row mt-5 ml-6 mr-6 ">
+          <div className="w-full h-auto gap-5 mt-7 sm:mt-10 sm:flex">
+            <div className="grid w-1/3 grid-flow-row gap-2 ml-6 sm:gap-3 ">
               <div>
-                <label className="text-xl text-gray-200 ">Product Name</label>
-              </div>
-              <div>
-                <input
-                  ref={productInput}
-                  className="w-5/12 py-2 bg-transparent border-2 rounded-md border-fuchsia-200"
-                />
-              </div>
-
-              <div>
-                <label className="text-xl text-gray-200 ">Product Detail</label>
+                <label className="hidden text-base text-white sm:block md:text-xl ">
+                  Product Name
+                </label>
               </div>
               <div>
                 <textarea
-                  rows="5"
-                  cols="40"
+                  ref={productInput}
+                  rows="1"
+                  cols="36"
+                  placeholder="Product Name"
+                  className="p-1 px-2 bg-transparent border border-white rounded-md "
+                />
+              </div>
+
+              <div>
+                <label className="hidden text-base text-white sm:block md:text-xl ">
+                  Product Detail
+                </label>
+              </div>
+              <div>
+                <textarea
+                  rows="1"
+                  cols="36"
                   ref={detailInput}
-                  className="bg-transparent border-2 rounded-md border-fuchsia-200 "
+                  placeholder="Product Detail"
+                  className="p-1 px-2 bg-transparent border border-white rounded-md"
                 />
               </div>
               <div>
-                <label className="text-xl text-gray-200 ">Starting Price</label>
+                <label className="hidden text-base text-white sm:block md:text-xl ">
+                  Price
+                </label>
               </div>
               <div>
                 <input
                   ref={priceInput}
                   type="number"
-                  max="10000000"
-                  className="w-1/4 py-1 text-xl bg-transparent border-2 rounded-md border-fuchsia-200"
+                  max="900000000"
+                  placeholder="Price"
+                  className="w-1/4 px-2 text-base text-white bg-transparent border border-white rounded-md md:text-xl"
                 />
               </div>
-
-              <div onChange={radioHandler} className="flex gap-3 mt-4 mb-3">
-                <label className="flex ">
-                  <input
-                    value="New"
-                    name="prod-type"
-                    type="radio"
-                    className="absolute hidden peer"
-                  />
-                  <span className=" peer-checked:rounded-full peer-checked:bg-black">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-blue-400 feather feather-circle"
-                    >
-                      <circle cx="12" cy="12" r="8"></circle>
-                    </svg>
-                  </span>
-                  Brand New
+              <div className="flex gap-3">
+                <label className="text-base text-white md:text-xl">
+                  Status:
                 </label>
-                <label className="flex ">
-                  <input
-                    valu="SlightlyUsed"
-                    name="prod-type"
-                    type="radio"
-                    className="absolute hidden peer"
-                  />
-                  <span className=" peer-checked:rounded-full peer-checked:bg-black">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-blue-400 feather feather-circle"
-                    >
-                      <circle cx="12" cy="12" r="8"></circle>
-                    </svg>
-                  </span>
-                  Slightly Used
-                </label>
-
-                <label className="flex ">
-                  <input
-                    value="Used"
-                    name="prod-type"
-                    type="radio"
-                    className="absolute hidden peer"
-                  />
-                  <span className=" peer-checked:rounded-full peer-checked:bg-black">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-blue-400 feather feather-circle "
-                    >
-                      <circle cx="12" cy="12" r="8"></circle>
-                    </svg>
-                  </span>
-                  Used
-                </label>
-              </div>
-
-              <div className="flex mb-5">
-                <select
-                  defaultValue="HomeAppliance"
-                  onChange={listHandler}
-                  className="text-lg text-gray-200 bg-transparent border-2 border-gray-400 rounded-lg"
-                >
-                  <option className="text-sm " value="Cars">
-                    Cars
-                  </option>
-                  <option className="text-sm " value="HomeAppliance">
-                    Home-Appliance
-                  </option>
-                  <option className="text-sm " value="Other">
-                    Other
-                  </option>
-                </select>
-                <div>
-                  <label className="ml-16 text-lg text-gray-200 ">
-                    Auction Deadline
-                  </label>
+                <div className="flex gap-1">
+                  <div className="my-auto ">
+                    <label className="flex">
+                      <input
+                        name="car-type"
+                        value="New"
+                        className="hidden peer"
+                        type="radio"
+                        onChange={statusHandler}
+                      />
+                      <span className=" peer-checked:rounded-full peer-checked:bg-black">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="text-blue-400 "
+                        >
+                          <circle cx="12" cy="12" r="9"></circle>
+                        </svg>
+                      </span>
+                    </label>
+                  </div>
+                  <div className="my-auto ">
+                    <label className="text-base text-white md:text-lg">
+                      New
+                    </label>
+                  </div>
                 </div>
 
+                <div className="flex gap-1">
+                  <div className="my-auto ">
+                    <label className="flex">
+                      <input
+                        name="car-type"
+                        value="Used"
+                        className="hidden peer"
+                        type="radio"
+                        onChange={statusHandler}
+                      />
+                      <span className=" peer-checked:rounded-full peer-checked:bg-black">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="text-blue-400 "
+                        >
+                          <circle cx="12" cy="12" r="9"></circle>
+                        </svg>
+                      </span>
+                    </label>
+                  </div>
+                  <div className="my-auto ">
+                    <label className="text-base text-white md:text-lg">
+                      Used
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-4/6 mt-5 mb-5 sm:grid-flow-col sm:grid">
+              <div className="flex gap-3 ml-6 sm:ml-0">
+                <div className="transform translate-y-1 ">Catagory*</div>
                 <div>
-                  <input
-                    ref={inputDeadline}
-                    type="date"
-                    className="ml-5 text-gray-200 bg-transparent border-2 border-gray-400 rounded-lg"
-                  ></input>
+                  <Select
+                    options={CatagoriesList}
+                    onChange={listHandler}
+                    className="absolute w-40 bg-transparent"
+                  />
                 </div>
               </div>
 
+              <div className="mt-5 ml-6 transform -translate-y-5 sm:ml-0 ">
+                {specification === "Vehicles" && (
+                  <VehiclesSpecification getData={getSpec} />
+                )}
+
+                {specification === "Electronics" && (
+                  <ElectronicsSpecification getData={getSpec} />
+                )}
+              </div>
+            </div>
+
+            <div>
               <ImageUploader
                 cssClass="rounded-lg w-36 h-36 md:w-24 md:h-24 lg:w-36 lg:h-36"
                 cssClassAfter="rounded-lg w-52 h-52 md:w-24 md:h-24 lg:w-52 lg:h-52"
                 img={img2}
                 onGetImage={getImage}
               />
+            </div>
 
-              <div className="mb-5 ">
-                <button className="px-4 py-1 text-gray-100 bg-blue-500 rounded-lg hover:bg-blue-600">
-                  Add Product
-                </button>
-              </div>
+            <div className="mb-5 ">
+              <button className="px-4 py-1 text-gray-100 bg-blue-500 rounded-lg hover:bg-blue-600">
+                Add Product
+              </button>
             </div>
           </div>
         </div>

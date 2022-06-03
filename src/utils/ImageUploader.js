@@ -48,7 +48,7 @@ const ImageUploader = (props) => {
       <div className="grid grid-flow-row gap-5 ">
         <input
           type="file"
-          accept=".jpeg,.png,.jpg"
+          accept=".jpeg,.png,.jpg,.webp"
           className="hidden "
           ref={filePickerRef}
           onChange={pickedHandler}
@@ -57,17 +57,20 @@ const ImageUploader = (props) => {
         <img
           alt="preview"
           src={`${imageUrl ? imageUrl : props.img}`}
-          className={`p-2 border-2 ${
-            imageUrl ? `${props.cssClassAfter}` : `${props.cssClass}`
+          className={`p-1 border ${
+            imageUrl ? `${props.cssClass}` : `${props.cssClass}`
           }`}
         />
-        <button
-          type="button"
-          onClick={pickImageHandler}
-          className="h-8 mb-5 ml-5 bg-blue-500 rounded-lg w-28 hover:bg-blue-600"
-        >
-          Add Image
-        </button>
+
+        <div>
+          <button
+            type="button"
+            onClick={pickImageHandler}
+            className="w-24 mb-5 ml-5 text-gray-100 bg-blue-500 rounded-lg h-7 sm:w-24 lg:text-base sm:text-sm hover:bg-blue-600"
+          >
+            Add Image
+          </button>
+        </div>
       </div>
     </div>
   );

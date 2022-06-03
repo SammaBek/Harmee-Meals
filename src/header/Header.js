@@ -1,12 +1,22 @@
-import React, { useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import SignedContext from "../store/Sign-Context";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { SignActions } from "../store/SignIn-slice";
-const Header = () => {
+import { NotificationActions } from "../store/Notification-Slice";
+import { MessageActions } from "../store/Message-Slice";
+import axios from "axios";
+import Cookies from "js-cookie";
+import SocketContext from "../store/Socket-Context";
+import { ErrorAction } from "../store/Error-Slice";
+const Header = (props) => {
   const location = useLocation();
+  const notNum = useSelector((state) => state.notf.notificationNum);
+  const userId = useSelector((state) => state.sign.userId);
+  const ctx = useContext(SocketContext);
 
+  const [notifications, setNotification] = useState();
   const page = location.pathname === "/signup" ? true : false;
   console.log(page);
 
@@ -14,12 +24,45 @@ const Header = () => {
   console.log(isLogged);
   const img = useSelector((state) => state.sign.userImage);
 
+  useEffect(() => {
+    const getData = async () => {
+      if (userId) {
+        try {
+          // ${localStorage.getItem("token")}
+          const Req = await axios({
+            method: "GET",
+            url: `http://localhost:8000/api/meals/getnotification/${userId}`,
+            headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+          });
+          setNotification(Req.data);
+          if (Req.data.notifications.length > 0) {
+            dispatch(
+              NotificationActions.setNum({ num: Req.data.notifications.length })
+            );
+            dispatch(NotificationActions.setMessage());
+          }
+        } catch (err) {
+          console.log(err.response.data.message);
+          dispatch(
+            ErrorAction.setError({ errorMessage: err.response.data.message })
+          );
+        }
+      }
+    };
+
+    getData();
+  }, []);
+
+  console.log(notifications);
+
   const dispatch = useDispatch();
-  const ctx = useContext(SignedContext);
+
   const history = useHistory();
 
   const signOutHandler = () => {
     dispatch(SignActions.signOut());
+    dispatch(NotificationActions.signOut());
+
     history.push("/signup");
   };
 
@@ -27,29 +70,33 @@ const Header = () => {
     history.push("/userpage");
   };
 
+  const showMessageHandler = () => {
+    dispatch(MessageActions.changeShowMessage());
+  };
+
   return (
-    <div className=" bg-gradient-to-r from-gray-300 via-purple-500 to-pink-300">
-      <nav>
-        <div className="flex justify-between px-5 py-2">
-          <div className="flex space-x-5 ">
+    <div className=" bg-gradient-to-tr from-blue-600 to-red-500">
+      <nav className="">
+        <div className="flex justify-between px-5 py-1">
+          <div className="flex ">
             <Link to="/">
               <svg
-                className="w-12 h-12 "
+                className="sm:w-12 sm:h-12 h-9 w-9 "
                 xmlns="http://www.w3.org/2000/svg"
                 height="24px"
                 viewBox="0 0 24 24"
                 width="24px"
-                fill="#60a5fa"
+                fill=""
               >
                 <path d="M0 0h24v24H0V0z" fill="none" />
                 <path d="M16 6v8h3v8h2V2c-2.76 0-5 2.24-5 4zm-5 3H9V2H7v7H5V2H3v7c0 2.21 1.79 4 4 4v9h2v-9c2.21 0 4-1.79 4-4V2h-2v7z" />
               </svg>
             </Link>
-            <h1 className="flex items-center text-2xl text-blue-400 justify">
-              Harmee Meal
+            <h1 className="flex items-center ml-2 text-sm text-white sm:text-base justify">
+              Gabaa
             </h1>
           </div>
-          <div className="flex items-center mr-10 space-x-5 justify-items-center">
+          <div className="flex items-center space-x-5 justify-items-center">
             {!isLogged && location.pathname !== "/signup" && (
               <Link
                 to="/signup"
@@ -70,15 +117,73 @@ const Header = () => {
             {isLogged && (
               <img
                 onClick={imgClickHandler}
-                className="w-16 h-16 rounded-full"
+                className="w-10 h-10 rounded-full"
                 src={`http://localhost:8000/${img}`}
                 alt="Pic"
               />
             )}
+
+            {isLogged && (
+              <button onClick={showMessageHandler} className="flex ">
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-6 h-6 text-gray-100"
+                  >
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </div>
+                <div className="absolute transform translate-x-4 -translate-y-1">
+                  <div className="flex items-center justify-center w-3 h-3 mx-auto bg-red-700 rounded-full">
+                    <span className="text-xs text-white ">9</span>
+                  </div>
+                </div>
+              </button>
+            )}
+
+            {isLogged && (
+              <Link to="/" className="flex">
+                <div>
+                  <span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="w-6 h-6 text-gray-100"
+                    >
+                      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                  </span>
+                </div>
+
+                <div className="absolute transform translate-x-3 -translate-y-2">
+                  <div className="flex items-center justify-center w-4 h-4 font-bold text-white bg-red-700 rounded-full">
+                    <span className="text-xs ">{notNum}</span>
+                  </div>
+                </div>
+              </Link>
+            )}
+
             {isLogged && (
               <button
                 onClick={signOutHandler}
-                className="px-2 bg-red-400 rounded-lg h-7 hover:bg-red-500"
+                className="justify-end px-2 text-sm bg-red-400 rounded-lg hover:bg-red-500"
               >
                 Sign Out
               </button>

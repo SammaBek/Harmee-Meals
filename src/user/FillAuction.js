@@ -4,19 +4,29 @@ import useHttp from "../hooks/Use-Http";
 import { useRef } from "react";
 import Cookies from "js-cookie";
 import { useState } from "react";
+import { useSpring, animated } from "react-spring";
 const FillAuction = (props) => {
+  const styles = useSpring({
+    from: { x: 100 },
+    config: { duration: 1000 },
+    loop: {
+      x: 0,
+    },
+  });
   const { sendRequest } = useHttp();
   const emailInput = useRef();
   const nameInput = useRef();
   const priceInput = useRef();
-  const show = useSelector((state) => state.sign.show);
+
   const prodId = useSelector((state) => state.sign.prodId);
-  const prodImage = props.prodImage;
+  const prodImage = useSelector((state) => state.sign.userImage);
   const dispatch = useDispatch();
 
   let email, price, product, name;
   const applyData = (user) => {
     console.log(user);
+    dispatch(SignActions.setShow({ show: false }));
+    props.onMake();
   };
 
   const bidHandler = async (event) => {
@@ -43,7 +53,14 @@ const FillAuction = (props) => {
       {
         method: "POST",
         url: "http://localhost:8000/api/meals/makebid",
-        data: { email, price, name, product, prodImage },
+        data: {
+          email,
+          price,
+          name,
+          product,
+          prodImage,
+          ownerId: props.ownerId,
+        },
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       },
       applyData
@@ -51,13 +68,13 @@ const FillAuction = (props) => {
   };
 
   const cancelHandler = () => {
-    dispatch(SignActions.setShow({ show: false }));
+    // dispatch(SignActions.setShow({ show: false }));
     props.onMake();
   };
 
   return (
-    <form onSubmit={bidHandler}>
-      {show && (
+    <animated.form style={styles} onSubmit={bidHandler}>
+      {props.show && (
         <div>
           <div>
             <h1 className="mx-auto mt-2 text-xl text-center text-blue-400">
@@ -119,7 +136,7 @@ const FillAuction = (props) => {
           </div>
         </div>
       )}
-    </form>
+    </animated.form>
   );
 };
 

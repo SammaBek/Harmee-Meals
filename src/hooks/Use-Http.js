@@ -1,11 +1,12 @@
 import { useState, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import ErrorContext from "../store/Error-Context";
 import FormData from "form-data";
+import { ErrorAction } from "../store/Error-Slice";
+import { useDispatch } from "react-redux";
 
 const useHttp = () => {
-  const errCtx = useContext(ErrorContext);
+  const dispatch = useDispatch();
   let user;
   const sendRequest = async (reqConfig, applyData) => {
     console.log(reqConfig.data);
@@ -24,7 +25,7 @@ const useHttp = () => {
     } catch (err) {
       console.log(err.response);
       const errMsg = err.response.data.message;
-      errCtx.setErrorMessage(errMsg);
+      dispatch(ErrorAction.setError({ ErrorMessage: errMsg }));
     }
   };
 

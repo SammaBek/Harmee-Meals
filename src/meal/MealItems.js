@@ -4,13 +4,24 @@ import { useDispatch, useSelector } from "react-redux";
 import Moment from "moment";
 import { SignActions } from "../store/SignIn-slice";
 import FillAuction from "../user/FillAuction";
+import { useSpring, animated } from "react-spring";
+
 const MealItems = (props) => {
+  const animatedFillAuction = animated(FillAuction);
+  const styles = useSpring({
+    from: { x: 0 },
+    config: { duration: 1000 },
+    loop: {
+      x: 100,
+    },
+  });
   const history = useHistory();
   const Dispatch = useDispatch();
   const userId = useSelector((state) => state.sign.userId);
   const Show = useSelector((state) => state.sign.show);
   const [sh, setSh] = useState(false);
   console.log(userId);
+
   const make = () => {
     setSh(false);
   };
@@ -43,7 +54,7 @@ const MealItems = (props) => {
           <div className="grid grid-flow-row text-md">
             <div className="flex gap-5">
               <div>
-                <label>Name:</label>
+                <label className="font-serif font-bold ">Name:</label>
               </div>
 
               <div>{props.name}</div>
@@ -51,7 +62,7 @@ const MealItems = (props) => {
 
             <div className="flex gap-5">
               <div>
-                <label>Price:</label>
+                <label className="font-serif font-bold ">Price:</label>
               </div>
 
               <div>{props.price}</div>
@@ -59,7 +70,7 @@ const MealItems = (props) => {
 
             <div className="flex gap-5">
               <div>
-                <label>Description:</label>
+                <label className="font-serif font-bold ">Description:</label>
               </div>
 
               <div>{props.description}</div>
@@ -67,15 +78,15 @@ const MealItems = (props) => {
 
             <div className="flex gap-5">
               <div>
-                <label>Type:</label>
+                <label className="font-serif font-bold ">Status:</label>
               </div>
 
-              <div>{props.type}</div>
+              <div>{props.status}</div>
             </div>
 
             <div className="flex gap-5">
               <div>
-                <label>Catagory:</label>
+                <label className="font-serif font-bold ">Catagory:</label>
               </div>
 
               <div>{props.catagory}</div>
@@ -83,7 +94,7 @@ const MealItems = (props) => {
 
             <div className="flex gap-5">
               <div>
-                <label>Deadline:</label>
+                <label className="font-serif font-bold ">Posted:</label>
               </div>
 
               <div>{Moment(props.deadline).format("LLLL")}</div>
@@ -91,7 +102,7 @@ const MealItems = (props) => {
 
             <div className="flex gap-5">
               <div>
-                <label>PostedBy:</label>
+                <label className="font-serif font-bold ">Posted By:</label>
               </div>
 
               <div>{props.postedBy}</div>
@@ -103,20 +114,14 @@ const MealItems = (props) => {
               Buy It Now
             </button>
           </div>
-
-          {/* <button
-          onClick={AddHandler}
-          type="submit"
-          className="w-16 h-8 mr-4 bg-red-400 rounded-lg hover:bg-red-500"
-        >
-          + ADD
-        </button> */}
         </section>
-        {Show && sh && (
+        {sh && (
           <FillAuction
             prodImage={localStorage.getItem("userId")}
             prodId={props.prodId}
             onMake={make}
+            ownerId={props.ownerId}
+            show={sh}
           />
         )}
       </div>

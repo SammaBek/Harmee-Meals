@@ -7,14 +7,17 @@ import {
   useContext,
 } from "react";
 import MealItems from "./MealItems";
-import ErrorContext from "../store/Error-Context";
+
 import ErrorModal from "../modal/ErrorModal";
-import SignedContext from "../store/Sign-Context";
+
 import Spinner from "../header/Spinner";
 import axios from "axios";
+import { ErrorAction } from "../store/Error-Slice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Meal = () => {
-  const ctx = useContext(ErrorContext);
+  const isError = useSelector((state) => state.error.isError);
+  const dispatch = useDispatch();
 
   const [Meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +32,9 @@ const Meal = () => {
         setIsLoading(false);
       } catch (err) {
         console.log(err.response.data.message);
-        ctx.setErrorMessage(err.response.data.message);
+        dispatch(
+          ErrorAction.setError({ errorMessage: err.response.data.message })
+        );
       }
     };
     getData();
@@ -37,7 +42,7 @@ const Meal = () => {
 
   return (
     <section>
-      {ctx.isError && <ErrorModal />}
+      {isError && <ErrorModal />}
       {isLoading && <Spinner />}
       {!isLoading &&
         Meals.map((item) => {
