@@ -5,6 +5,8 @@ const initialBid = {
   price: null,
   id: null,
   email: null,
+  description: null,
+  productCatagory: null,
 };
 
 const BidSlice = createSlice({

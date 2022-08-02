@@ -13,9 +13,9 @@ const LaptopSpecification = (props) => {
 
   const ScreenSize = [
     { value: "14", label: "14-Inch" },
-    { value: "16", label: "15-Inch" },
-    { value: "17", label: "16-Inch" },
-    { value: "20", label: "17-Inch" },
+    { value: "15", label: "15-Inch" },
+    { value: "16", label: "16-Inch" },
+    { value: "17", label: "17-Inch" },
   ];
 
   const Processors = [
@@ -190,71 +190,120 @@ const LaptopSpecification = (props) => {
     }
   }, [state, props]);
 
+  useEffect(() => {
+    if (props.editLaptop) {
+      dispatch({ type: "BRAND", item: props.editLaptop.laptopBrand });
+      dispatch({ type: "MODEL", item: props.editLaptop.laptopModel });
+      dispatch({ type: "PROCESSOR", item: props.editLaptop.laptopProcessor });
+      dispatch({ type: "SCREENSIZE", item: props.editLaptop.laptopScreenSize });
+      dispatch({ type: "RAM", item: props.editLaptop.laptopRam });
+      dispatch({ type: "STORAGE", item: props.editLaptop.laptopStorage });
+    }
+  }, []);
+
   return (
-    <div className="grid grid-flow-row gap-4 mt-4">
-      <div className="flex ">
-        <div>Brand: </div>
-        <div className="ml-20 ">
+    <div className="grid grid-flow-row gap-2 mt-1 sm:mt-1 sm:gap-2">
+      <div className="grid">
+        <div className="lg:text-lg">Brand: </div>
+        <div className="ml-0">
           <Select
-            className="w-40 h-10 ml-1.5 text-base text-center text-red-500 "
+            className="w-40 h-10 ml-0 text-base text-center text-red-500 md:w-48 "
             options={Brand}
             onChange={brandHandler}
             isClearable
+            defaultValue={{
+              value: `${
+                props.editLaptop ? props.editLaptop.laptopBrand : null
+              }`,
+              label: `${
+                props.editLaptop ? props.editLaptop.laptopBrand : null
+              }`,
+            }}
           />
         </div>
       </div>
 
-      <div className="flex ">
-        <div>Screen Size:</div>
-        <div className="ml-9 ">
+      <div className="grid">
+        <div className="lg:text-lg">Screen Size:</div>
+        <div className="ml-0 ">
           <Select
-            className="w-40 h-10 ml-2 text-base text-center text-red-500"
+            className="w-40 h-10 ml-0 text-base text-center text-red-500 md:w-48"
             options={ScreenSize}
             onChange={screenSizeHandler}
             isClearable
+            defaultValue={{
+              value: `${
+                props.editLaptop ? props.editLaptop.laptopScreenSize : null
+              }`,
+              label: `${
+                props.editLaptop ? props.editLaptop.laptopScreenSize : null
+              }`,
+            }}
           />
         </div>
       </div>
 
-      <div className="flex ">
+      <div className="grid lg:text-lg">
         <div>Processors:</div>
-        <div className="ml-9 ">
+        <div className="ml-0">
           <Select
-            className="w-40 h-10 ml-3 text-base text-center text-red-500"
+            className="w-40 h-10 ml-0 text-base text-center text-red-500 md:w-48"
             options={Processors}
             onChange={processorHandler}
             isClearable
+            defaultValue={{
+              value: `${
+                props.editLaptop ? props.editLaptop.laptopProcessor : null
+              }`,
+              label: `${
+                props.editLaptop ? props.editLaptop.laptopProcessor : null
+              }`,
+            }}
           />
         </div>
       </div>
 
-      <div className="flex ">
-        <div>Storage:</div>
-        <div className="ml-9 ">
+      <div className="grid">
+        <div className="lg:text-lg">Storage:</div>
+        <div className="ml-0">
           <Select
-            className="w-40 h-10 text-base text-center text-red-500 ml-9"
+            className="w-40 h-10 ml-0 text-base text-center text-red-500 md:w-48 "
             options={Storage}
             onChange={storageHandler}
             isClearable
+            defaultValue={{
+              value: `${
+                props.editLaptop ? props.editLaptop.laptopStorage : null
+              }`,
+              label: `${
+                props.editLaptop ? props.editLaptop.laptopStorage : null
+              }`,
+            }}
           />
         </div>
       </div>
 
-      <div className="flex gap-9">
-        <label className="my-auto mr-1.5">RAM(GB)</label>
+      <div className="grid gap-0 ">
+        <label className="my-auto ml-0 lg:text-lg">RAM(GB)</label>
         <input
           type="number"
-          className="w-40 h-8 p-1 ml-6 border-2 border-gray-300 rounded-md"
+          className="w-40 h-8 p-1 ml-0 border-2 border-gray-300 rounded-md md:w-48"
           onChange={ramHandler}
+          defaultValue={`${
+            props.editLaptop.laptopRam ? props.editLaptop.laptopRam : null
+          }`}
         />
       </div>
 
-      <div className="flex gap-10">
-        <label className="my-auto ">Model</label>
+      <div className="grid gap-0 ">
+        <label className="my-auto lg:text-lg">Model</label>
         <input
           type="text"
-          className="w-40 h-8 p-1 ml-12 border-2 border-gray-300 rounded-md"
+          className="w-40 h-8 p-1 ml-0 border-2 border-gray-300 rounded-md md:w-48"
           onChange={modelHandler}
+          defaultValue={`${
+            props.editLaptop.laptopModel ? props.editLaptop.laptopModel : null
+          }`}
         />
       </div>
     </div>

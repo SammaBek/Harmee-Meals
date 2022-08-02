@@ -61,66 +61,67 @@ const Message = () => {
   };
   return (
     <Fragment>
-      <animated.div
-        style={styles}
-        className="absolute bg-gray-100 rounded-lg w-96 h-3/4"
-      >
-        <div className="h-6 rounded-lg bg-slate-700">
-          <div className="flex gap-2">
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                onClick={cancelHandler}
-                className="w-4 h-4 ml-2 transform translate-y-1 bg-red-400 rounded-full hover:bg-red-500"
-              >
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </div>
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-4 h-4 ml-2 transform translate-y-1 bg-yellow-400 rounded-full hover:bg-yellow-500"
-              >
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
+      <div className="fixed inset-0 bg-gray-800 bg-opacity-70">
+        <div className=" bg-gray-100 rounded-lg w-[83%] sm:w-[60%] lg:w-96 h-[60%] mx-auto mt-14">
+          <div className="h-6 rounded-lg bg-slate-700">
+            <div className="flex gap-2">
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  onClick={cancelHandler}
+                  className="w-4 h-4 ml-2 transform translate-y-1 bg-red-400 rounded-full hover:bg-red-500"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </div>
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4 ml-2 transform translate-y-1 bg-yellow-400 rounded-full hover:bg-yellow-500"
+                >
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="ml-4 text-xl text-gray-600">Messenger</div>
+          <div className="ml-4 text-xl text-gray-600">Messenger</div>
 
-        {message &&
-          message.map((msg) => {
-            let newMessage;
-            if (msg.message.length > 36) {
-              const m = msg.message.slice(0, 36);
-              newMessage = m.padEnd(38, ".");
-            } else {
-              newMessage = msg.message;
-            }
-            return (
-              <div className="p-2 overflow-visible overflow-y-auto ">
-                <MessageDetail msg={msg} newMessage={newMessage} />
-              </div>
-            );
-          })}
-      </animated.div>
+          <div className="h-56 overflow-visible overflow-y-auto">
+            {message &&
+              message.map((msg) => {
+                let newMessage;
+                if (msg.message.length > 36) {
+                  const m = msg.message.slice(0, 36);
+                  newMessage = m.padEnd(38, ".");
+                } else {
+                  newMessage = msg.message;
+                }
+                return (
+                  <div className="p-2 ">
+                    <MessageDetail msg={msg} newMessage={newMessage} />
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+      </div>
     </Fragment>
   );
 };

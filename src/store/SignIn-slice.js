@@ -10,6 +10,8 @@ const initialSignInState = {
   prodId: null,
   show: false,
   searched: null,
+  catagories: null,
+  phone: null,
 };
 
 const Sign = createSlice({
@@ -25,6 +27,9 @@ const Sign = createSlice({
       state.userImage = action.payload.userImage;
       state.userName = action.payload.userName;
       state.userEmail = action.payload.userEmail;
+      state.phone = action.payload.phone;
+      state.searched = null;
+      state.prodId = null;
     },
 
     signOut(state) {
@@ -39,6 +44,9 @@ const Sign = createSlice({
       state.updateMessage = false;
       state.showMessage = false;
       state.searched = null;
+      state.catagories = null;
+      state.phone = null;
+      state.prodId = null;
     },
     signUp(state, action) {
       Cookies.set("token", action.payload.token, {
@@ -52,6 +60,7 @@ const Sign = createSlice({
       state.userImage = action.payload.userImage;
       state.userName = action.payload.userName;
       state.userEmail = action.payload.userEmail;
+      state.prodId = null;
     },
     setBid(state, action) {
       state.prodId = action.payload.prodId;
@@ -62,6 +71,12 @@ const Sign = createSlice({
 
     setSearched(state, action) {
       state.searched = action.payload.search;
+      state.catagories = null;
+      state.prodId = null;
+    },
+    setCatagories(state, action) {
+      state.catagories = action.payload.catagories;
+      state.prodId = null;
     },
   },
 });

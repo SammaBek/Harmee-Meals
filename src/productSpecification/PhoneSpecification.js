@@ -146,6 +146,17 @@ const PhoneSpecification = (props) => {
   };
 
   useEffect(() => {
+    if (props.editPhone) {
+      setPhone(props.editPhone.phoneBrand);
+      dispatch({ type: "BRAND", item: props.editPhone.phoneBrand });
+      dispatch({ type: "MODEL", item: props.editPhone.phoneModel });
+      dispatch({ type: "STORAGE", item: props.editPhone.phoneStorage });
+      dispatch({ type: "RAM", item: props.editPhone.phoneRam });
+      dispatch({ type: "CAMERA", item: props.editPhone.phoneCamera });
+    }
+  }, []);
+
+  useEffect(() => {
     if (props.type === "filter") {
       props.getSpec(state);
     } else {
@@ -163,79 +174,102 @@ const PhoneSpecification = (props) => {
   }, [state, props]);
 
   return (
-    <div className="grid grid-flow-row gap-4 py-2 ">
-      <div className="flex gap-4">
-        <label>Phone Type</label>
+    <div className="grid grid-flow-row gap-2 sm:gap-2 ">
+      <div className="grid gap-0 ">
+        <label className="lg:text-lg">Phone Type</label>
         <Select
-          className="w-40 ml-9 sm:ml-6"
+          className="ml-0 w-44 md:w-48"
           options={phones}
           isClearable
           onChange={phonesHandler}
+          defaultValue={{
+            value: `${props.editPhone ? props.editPhone.phoneBrand : null}`,
+            label: `${props.editPhone ? props.editPhone.phoneBrand : null}`,
+          }}
         />
       </div>
 
-      <div className="flex">
-        <label>Model</label>
-        <div className="ml-20 sm:ml-16 ">
+      <div className="grid">
+        {phone && <label className="lg:text-lg">Model</label>}
+
+        <div className="ml-0 ">
           {phone === "Iphone" && (
             <Select
-              className="w-40 ml-4"
+              className="ml-0 w-44 md:w-48"
               options={IphoneModel}
               isClearable
               onChange={modelHandler}
+              defaultValue={{
+                value: `${props.editPhone ? props.editPhone.phoneModel : null}`,
+                label: `${props.editPhone ? props.editPhone.phoneModel : null}`,
+              }}
             />
           )}
 
           {phone === "Samsung" && (
             <Select
-              className="w-40 ml-3"
+              className="ml-0 w-44 md:w-48"
               options={SamsungModel}
               isClearable
               onChange={modelHandler}
+              defaultValue={{
+                value: `${props.editPhone ? props.editPhone.phoneModel : null}`,
+                label: `${props.editPhone ? props.editPhone.phoneModel : null}`,
+              }}
             />
           )}
 
           {phone === "Huawei" && (
             <Select
-              className="w-40 ml-3"
+              className="ml-0 w-44 md:w-48"
               options={HuaweiModel}
               isClearable
               onChange={modelHandler}
+              defaultValue={{
+                value: `${props.editPhone ? props.editPhone.phoneModel : null}`,
+                label: `${props.editPhone ? props.editPhone.phoneModel : null}`,
+              }}
             />
           )}
         </div>
       </div>
 
-      <div className="flex gap-4">
-        <label className="my-auto ">Storage(GB)</label>
+      <div className="grid gap-0 ">
+        <label className="my-auto lg:text-lg">Storage(GB)</label>
 
         <Select
           options={storage}
           isClearable
           onChange={storageHandler}
-          className="w-40 ml-8 sm:ml-5"
+          className="ml-0 w-44 md:w-48"
+          defaultValue={{
+            value: `${props.editPhone ? props.editPhone.phoneStorage : null}`,
+            label: `${props.editPhone ? props.editPhone.phoneStorage : null}`,
+          }}
         />
       </div>
 
-      <div className="flex gap-10">
-        <label className="my-auto ">RAM(GB)</label>
+      <div className="grid gap-0 ">
+        <label className="my-auto lg:text-lg">RAM(GB)</label>
         <input
           min="1"
           max="32"
           type="number"
-          className="w-40 h-8 p-1 ml-8 border border-gray-300 rounded-md sm:ml-5"
+          className="h-8 p-1 ml-0 border border-gray-300 rounded-md w-44 md:w-48"
           onChange={ramHandler}
+          defaultValue={props.editPhone ? props.editPhone.phoneRam : null}
         />
       </div>
 
-      <div className="flex gap-4">
-        <label className="my-auto ">Camera(MP)</label>
+      <div className="grid gap-0 ">
+        <label className="my-auto lg:text-lg">Camera(MP)</label>
         <input
           min="1"
           max="120"
           type="number"
-          className="w-40 h-8 p-1 ml-8 border border-gray-300 rounded-md sm:ml-5"
+          className="h-8 p-1 ml-0 border border-gray-300 rounded-md w-44 md:w-48"
           onChange={cameraHandler}
+          defaultValue={props.editPhone ? props.editPhone.phoneCamera : null}
         />
       </div>
     </div>

@@ -1,19 +1,31 @@
-import { useState } from "react";
-import Select from "react-select";
+import { useRef, useState } from "react";
+import Select, { InputActionMeta } from "react-select";
 import PhoneSpecification from "./PhoneSpecification";
 import TvSpecification from "./TvSpecification";
 import LaptopSpecification from "./LaptopSpecification";
 const ElectronicsSpecification = (props) => {
   console.log(props.type);
-  const [elecType, setElecType] = useState();
+
+  let count;
+  const [elecType, setElecType] = useState(
+    `${props.editSpecs ? props.editSpecs.specs.ElectronicType : null}`
+  );
+
   const products = [
     { value: "Phone", label: "Phone" },
     { value: "TV", label: "TV" },
     { value: "Laptop", label: "Laptop" },
   ];
 
+  for (let i = 0; i < products.length; i++) {
+    if (products[i].value === props.editSpecs.specs.ElectronicType) {
+      count = i;
+    }
+  }
   const productHandler = (inputValue, { action, prevInputValue }) => {
     const finalSpec = {};
+
+    console.log(action);
     if (action === "clear") {
       setElecType(null);
       finalSpec["ElectronicType"] = null;
@@ -23,37 +35,59 @@ const ElectronicsSpecification = (props) => {
       finalSpec["ElectronicType"] = inputValue.value;
     }
 
-    props.getData(finalSpec);
+    // props.getData(finalSpec);
   };
 
   const getSpecification = (specs) => {
-    console.log(specs);
-
-    props.getData(specs);
+    if (props.editSpecs) {
+      console.log(specs);
+      props.fetchUpdate(specs);
+    } else {
+      props.getData(specs);
+    }
   };
 
   return (
     <div
       className={`grid grid-flow-row   ${
-        props.type === "filter" ? "w-80 sm:w-80" : "  shadow-2xl w-96"
+        props.type === "filter"
+          ? "w-80 sm:w-80"
+          : " border  shadow-2xl w-80 sm:w-[90%] p-3 sm:p-4 md:px-8 md:w-[85%] lg:w-[80%] lg:px-10 xl:px-14 xl:w-[70%]"
       } `}
     >
-      <div className="mx-auto mt-2 text-center">Electronics Specification</div>
-      <div className="flex py-2">
-        <div>Electronics Type: </div>
-        <div className="ml-3 ">
+      <div className="mt-2 mb-2 text-base font-bold sm:text-base md:mx-auto md:text-center lg:text-lg">
+        Electronics Specification
+      </div>
+      <div className="grid py-1 sm:mt-2">
+        <div className="text-base sm:text-base lg:text-lg">
+          Electronics Type:{" "}
+        </div>
+        <div className="ml-0 ">
           <Select
-            className="w-40 text-base text-center text-red-500"
+            className="text-sm text-center text-red-500 w-44 sm:text-base md:w-48"
             options={products}
             onChange={productHandler}
+            // onInputChange={productHandler}
             isClearable
+            defaultValue={{
+              value: `${
+                props.editSpecs.specs.ElectronicType
+                  ? props.editSpecs.specs.ElectronicType
+                  : products[0]
+              }`,
+              label: `${
+                props.editSpecs.specs.ElectronicType
+                  ? props.editSpecs.specs.ElectronicType
+                  : products[0]
+              }`,
+            }}
           />
         </div>
       </div>
       <div
         className={`grid grid-flow-row ${
           elecType ? "block" : "hidden"
-        }  mt-4 mb-2 overflow-y-auto h-80`}
+        }  mt-4 mb-2 overflow-y-auto h-80 sm:h-96 sm:w-[80%]`}
       >
         <div>
           {elecType === "Phone" && (
@@ -61,12 +95,17 @@ const ElectronicsSpecification = (props) => {
               <PhoneSpecification
                 type={props.type}
                 getSpec={getSpecification}
+                editPhone={props.editSpecs.specs ? props.editSpecs.specs : null}
               />
             </div>
           )}
           {elecType === "TV" && (
             <div>
-              <TvSpecification type={props.type} getSpec={getSpecification} />
+              <TvSpecification
+                type={props.type}
+                getSpec={getSpecification}
+                editTV={props.editSpecs.specs ? props.editSpecs.specs : null}
+              />
             </div>
           )}
           {elecType === "Laptop" && (
@@ -74,6 +113,9 @@ const ElectronicsSpecification = (props) => {
               <LaptopSpecification
                 type={props.type}
                 getSpec={getSpecification}
+                editLaptop={
+                  props.editSpecs.specs ? props.editSpecs.specs : null
+                }
               />
             </div>
           )}

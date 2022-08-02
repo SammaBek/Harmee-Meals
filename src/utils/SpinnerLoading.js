@@ -1,7 +1,7 @@
 const Spinner = () => {
   return (
-    <div className="absolute inset-0 h-full max-h-full mx-auto inset-y-20 ">
-      <div className="flex justify-center gap-10 mt-80">
+    <div className="absolute inset-0 h-full max-h-full mx-auto ">
+      <div className="flex justify-center gap-10 my-auto mt-40">
         <div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -13,7 +13,7 @@ const Spinner = () => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="w-20 h-20 mx-auto text-blue-200 animate-spin "
+            className="w-6 h-6 mx-auto text-blue-400 animate-spin "
           >
             <line x1="12" y1="2" x2="12" y2="6"></line>
             <line x1="12" y1="18" x2="12" y2="22"></line>
@@ -26,9 +26,7 @@ const Spinner = () => {
           </svg>
         </div>
 
-        <div className="text-4xl text-blue-200 transform translate-y-5">
-          Loading...
-        </div>
+        <div className="text-lg text-blue-200 transform ">Loading...</div>
       </div>
     </div>
   );

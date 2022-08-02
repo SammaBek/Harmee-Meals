@@ -108,6 +108,15 @@ const TvSpecification = (props) => {
   };
 
   useEffect(() => {
+    if (props.editTV) {
+      dispatch({ type: "BRAND", item: props.editTV.tvBrand });
+      dispatch({ type: "MODEL", item: props.editTV.tvModel });
+      dispatch({ type: "RESOLUTION", item: props.editTV.tvResolution });
+      dispatch({ type: "SCREENSIZE", item: props.editTV.tvScreenSize });
+    }
+  }, []);
+
+  useEffect(() => {
     if (props.type === "filter") {
       props.getSpec(state);
     } else {
@@ -124,49 +133,64 @@ const TvSpecification = (props) => {
   }, [state, props]);
 
   return (
-    <div className="grid grid-flow-row gap-4 ">
-      <div className="flex ">
-        <div>Brand: </div>
-        <div className="ml-20 sm:ml-16 ">
+    <div className="grid grid-flow-row gap-2 ">
+      <div className="grid">
+        <div className="lg:text-lg">Brand:</div>
+        <div className="ml-0 ">
           <Select
-            className="w-40 h-10 ml-2.5 sm:ml-4 text-base text-center text-red-500 "
+            className="w-40 h-10 ml-0 text-base text-center text-red-500 md:w-48 "
             options={Brand}
             onChange={brandHandler}
             isClearable
+            defaultValue={{
+              value: `${props.editTV ? props.editTV.tvBrand : null}`,
+              label: `${props.editTV ? props.editTV.tvBrand : null}`,
+            }}
           />
         </div>
       </div>
 
-      <div className="flex gap-2">
-        <div>Model No:</div>
-        <div className="ml-12 sm:ml-9">
+      <div className="grid gap-0">
+        <div className="lg:text-lg">Model</div>
+        <div className="ml-0">
           <input
             onChange={modelHandler}
-            className="w-40 p-1 ml-2 text-sm border rounded-md h-9 border-slate-300"
+            className="w-40 p-1 ml-0 text-sm border rounded-md md:w-48 h-9 border-slate-300"
+            defaultValue={`${
+              props.editTV.tvModel ? props.editTV.tvModel : null
+            }`}
           />
         </div>
       </div>
 
-      <div className="flex ">
-        <div>Screen Size:</div>
-        <div className="ml-9 sm:ml-6 ">
+      <div className="grid">
+        <div className="lg:text-lg">Screen Size:</div>
+        <div className="ml-0 ">
           <Select
-            className="w-40 h-10 ml-3 text-base text-center text-red-500"
+            className="w-40 h-10 ml-0 text-base text-center text-red-500 md:w-48"
             options={ScreenSize}
             onChange={screenSizeHandler}
             isClearable
+            defaultValue={{
+              value: `${props.editTV ? props.editTV.tvScreenSize : null}`,
+              label: `${props.editTV ? props.editTV.tvScreenSize : null}`,
+            }}
           />
         </div>
       </div>
 
-      <div className="flex ">
-        <div>Resolution: </div>
-        <div className="ml-14 sm:ml-12">
+      <div className="grid">
+        <div className="lg:text-lg">Resolution: </div>
+        <div className="ml-0">
           <Select
-            className="w-40 text-base text-center text-red-500"
+            className="w-40 text-base text-center text-red-500 md:w-48"
             options={Resolution}
             onChange={resolutionHandler}
             isClearable
+            defaultValue={{
+              value: `${props.editTV ? props.editTV.tvResolution : null}`,
+              label: `${props.editTV ? props.editTV.tvResolution : null}`,
+            }}
           />
         </div>
       </div>

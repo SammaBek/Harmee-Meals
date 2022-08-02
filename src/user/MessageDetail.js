@@ -39,6 +39,7 @@ const MessageDetail = (props) => {
           bidder={props.msg.participants[0]}
           userId={props.msg.participants[1]}
           make={cancelDetail}
+          name={props.msg.name}
         />
       )}
     </Fragment>

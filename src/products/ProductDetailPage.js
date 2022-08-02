@@ -37,29 +37,50 @@ const ProductDetailPage = (props) => {
 
   useEffect(() => {
     const getData = async () => {
-      setSearch(props.search);
+      if (props.search) {
+        setSearch(props.search);
+        console.log(props.search);
+      }
+
+      console.log(props.catagories);
+      if (props.catagories) {
+        specs["productCatagory"] = props.catagories;
+        console.log(specs);
+        try {
+          const Data = await axios({
+            method: "GET",
+            url: `http://localhost:8000/api/meals/filterProducts/`,
+            params: specs,
+          });
+
+          setData(Data.data.products);
+        } catch (err) {
+          console.log(err);
+        }
+      }
     };
     getData();
   }, []);
 
   useEffect(() => {
     const getData = async () => {
-      try {
-        console.log(props.search);
-        console.log(search);
-        const Data = await axios({
-          method: "GET",
-          url: `http://localhost:8000/api/meals/getByName/${search}`,
-          headers: { Authorization: `Bearer ${Cookies.get("token")}` },
-        });
-        console.log(Data);
-        setData(Data.data.meal);
-      } catch (err) {
-        console.log(err);
+      if (search) {
+        try {
+          console.log(search);
+          const Data = await axios({
+            method: "GET",
+            url: `http://localhost:8000/api/meals/getByName/${search}`,
+            headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+          });
+          console.log(Data);
+          setData(Data.data.meal);
+        } catch (err) {
+          console.log(err);
+        }
       }
     };
     getData();
-  }, [search, props.search]);
+  }, [search]);
 
   const listHandler = (event) => {
     console.log(event);
@@ -118,7 +139,7 @@ const ProductDetailPage = (props) => {
         <div>
           <input
             ref={searchInput}
-            className="flex h-10 px-3 py-1 text-lg border border-gray-300 rounded-lg w-72"
+            className="flex h-10 px-3 py-1 text-lg border border-gray-300 rounded-lg w-72 lg:w-96 lg:h-14"
             placeholder="What are you looking for?"
           />
         </div>
@@ -134,7 +155,7 @@ const ProductDetailPage = (props) => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="w-5 h-5 text-green-300 transform -translate-x-10 translate-y-3"
+            className="w-5 h-5 text-green-300 transform -translate-x-10 translate-y-3 lg:w-6 lg:h-6 lg:translate-y-4"
           >
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -142,7 +163,7 @@ const ProductDetailPage = (props) => {
         </div>
       </div>
       <div className="gap-10 sm:gap-0 sm:flex ">
-        <div className="grid grid-flow-row sm:h-screen ">
+        <div className="grid grid-flow-row sm:h-screen md:w-[65%] sm:hidden">
           <div className="text-lg font-bold text-center sm:ml-4 sm:text-2xl sm:mt-5 ">
             {` ${
               data.length === 0
@@ -151,7 +172,7 @@ const ProductDetailPage = (props) => {
             } `}
           </div>
           {data.length !== 0 && (
-            <div className="flex h-64 gap-2  mt-2 overflow-x-auto sm:overflow-x-hidden sm:border sm:border-gray-300 sm:w-[92%] sm:h-screen sm:grid sm:ml-0 sm:border-l-0 sm:border-b-0 sm:border-t-0  sm:overflow-y-auto">
+            <div className="flex h-64 gap-2  mt-2 overflow-x-auto sm:overflow-x-hidden md:w-[100%]  sm:w-[100%] sm:h-screen sm:grid sm:ml-2  sm:overflow-y-auto">
               {data.length !== 0 &&
                 data.map((item) => {
                   return (
@@ -169,14 +190,14 @@ const ProductDetailPage = (props) => {
           )}
         </div>
 
-        <div className="gap-3 p-2 mt-20 sm:p-0 sm:mt-20 h-2/3 sm:-translate-x-1">
-          <div className="flex sm:w-72">
+        <div className="gap-3 p-2 mt-3 sm:p-0 sm:ml-[1%] sm:mt-20 h-2/3 sm:border sm:border-gray-300 sm:border-l-0 sm:border-b-0 sm:border-t-0 md:w-[35%] lg:w-[25%] xl:w-[30%]   sm:w-[40%]">
+          <div className="flex sm:w-72 lg:w-80">
             <div className="my-auto text-base ">Catagory:</div>
             <div className="ml-1 ">
               <Select
                 options={CatagoriesList}
                 onChange={listHandler}
-                className="absolute w-48 h-8"
+                className="absolute w-40 h-8"
               />
             </div>
           </div>
@@ -201,6 +222,32 @@ const ProductDetailPage = (props) => {
               Save
             </button>
           </div>
+        </div>
+        <div className="grid grid-flow-row sm:h-screen md:w-[65%] hidden sm:block">
+          <div className="text-lg font-bold text-center sm:ml-4 sm:text-2xl sm:mt-5 ">
+            {` ${
+              data.length === 0
+                ? "We have no result for your search"
+                : "Here are some Results for your Search"
+            } `}
+          </div>
+          {data.length !== 0 && (
+            <div className="flex h-64 gap-2  mt-2 overflow-x-auto sm:overflow-x-hidden md:w-[100%]  sm:w-[100%] sm:h-screen sm:grid sm:ml-2  sm:overflow-y-auto">
+              {data.length !== 0 &&
+                data.map((item) => {
+                  return (
+                    <SearchResult
+                      key={item.id}
+                      price={item.price}
+                      name={item.name}
+                      description={item.description}
+                      image={item.image}
+                      status={item.status}
+                    />
+                  );
+                })}
+            </div>
+          )}
         </div>
       </div>
     </div>

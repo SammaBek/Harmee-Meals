@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import UserPage from "./user/UserPage";
 import AddProduct from "./user/AddProduct";
 import FillAuction from "./user/FillAuction";
-import UserNotification from "./user/UserNotification";
+
 import { useDispatch } from "react-redux";
 import NewPassword from "./user/NewPassword";
 import MessageDetail from "./user/MessageDetail";
@@ -24,6 +24,8 @@ import SocketContext from "./store/Socket-Context";
 import Message from "./user/Message";
 import ProductDetailPage from "./products/ProductDetailPage";
 import Electronics from "./Filters/Electronics";
+import ProductDetail from "./products/ProductDetail";
+import SpecificProduct from "./products/SpecificProduct";
 import {
   BrowserRouter as Router,
   Route,
@@ -39,8 +41,10 @@ function App() {
   const showMessages = useSelector((state) => state.message.showMessage);
   const detailMessage = useSelector((state) => state.message.detailMessage);
   const searched = useSelector((state) => state.sign.searched);
+  const catagories = useSelector((state) => state.sign.catagories);
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.sign.userId);
+  const prodId = useSelector((state) => state.sign.prodId);
 
   useEffect(() => {
     const socket = io("http://localhost:8000");
@@ -75,7 +79,6 @@ function App() {
   return (
     <Router>
       <Header />
-      {showMessages && <Message />}
 
       <Switch>
         <Route path="/signup" exact>
@@ -89,7 +92,7 @@ function App() {
         </Route>
 
         <Route path="/ProductDetailPage" exact>
-          <ProductDetailPage search={searched} />
+          <ProductDetailPage search={searched} catagories={catagories} />
         </Route>
 
         <Route path="/landingPage" exact>
@@ -98,10 +101,6 @@ function App() {
 
         <Route path="/newpassword/:resetToken" exact>
           <NewPassword />
-        </Route>
-
-        <Route path="/user/notification" exact>
-          <UserNotification />
         </Route>
 
         <Route path="/user/addproduct" exact>
@@ -131,6 +130,14 @@ function App() {
         <Route path="/forgotPassword" exact>
           <ForgotPassword />
         </Route>
+        <Route path="/detail" exact>
+          <ProductDetail />
+        </Route>
+
+        <Route path="/specificProduct" exact>
+          <SpecificProduct prodId={prodId} />
+        </Route>
+
         <Route path="/" exact>
           <LandingPage />
         </Route>

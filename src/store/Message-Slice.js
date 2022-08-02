@@ -3,6 +3,7 @@ const initialMessageState = {
   showMessage: false,
   updateMessage: false,
   detailMessage: false,
+  numMessage: 0,
 };
 
 const Message = createSlice({
@@ -17,6 +18,9 @@ const Message = createSlice({
     },
     messageDetail(state) {
       state.detailMessage = !state.detailMessage;
+    },
+    setNumMessage(state, action) {
+      state.numMessage = action.payload.numMessage;
     },
   },
 });

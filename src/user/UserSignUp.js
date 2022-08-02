@@ -25,6 +25,7 @@ const UserSignUp = () => {
   const nameInput = useRef();
   const emailInput = useRef();
   const passwordInput = useRef();
+  const phoneInput = useRef();
 
   const getImage = (image, valid) => {
     setImg(image);
@@ -40,6 +41,7 @@ const UserSignUp = () => {
           userId: val.theUser.userId,
           userImage: val.theUser.image,
           userName: val.theUser.userName,
+          phone: val.theUser.phone,
         })
       );
 
@@ -64,6 +66,7 @@ const UserSignUp = () => {
     form.append("email", emailInput.current.value);
     form.append("password", passwordInput.current.value);
     form.append("image", img);
+    form.append("phone", phoneInput.current.value);
 
     console.log(img);
 
@@ -83,41 +86,29 @@ const UserSignUp = () => {
     <div className="min-h-screen sm:flex debug-screens bg-gradient-to-r from-slate-700 via-blue-500 to-black">
       {isError && <ErrorModal />}
 
-      <div className="lg:mt-24 sm:ml-5  sm:mt-32 lg:ml-8 md:ml-8 xl:w-[40%] lg:w-2/5 xl:my-auto md:w-[75%] md:mt-24">
+      <div className="lg:mt-24 sm:ml-5  sm:mt-32 lg:ml-8 md:ml-6 xl:w-[40%] lg:w-2/5 xl:my-auto md:w-[75%] md:mt-24">
         <img
-          className="rounded-lg  w-0 h-0  sm:h-72 sm:w-72  md:h-80 md:w-[85%] lg:h-96 xl:h-[60%] lg:w-[90%] "
+          className="rounded-lg  w-0 h-0  sm:h-72 sm:w-72  md:h-72 md:w-[85%] lg:h-96 xl:h-[60%] lg:w-[90%] "
           src={img2}
           alt="pic"
         ></img>
       </div>
-      <div className=" mt-10 w-[80%] h-auto  mx-auto sm:h-[75%]  sm:mb-1 lg:h-[80%] sm:mt-16  md:w-[85%] md:h-[80%] sm:w-[50%]  text-white rounded-lg shadow-2xl sm:ml-10  lg:w-[45%]  lg:mb-5 lg:ml-10 md:ml-1 border xl:mr-10 lg:mt-10 md:1/2 md:mr-8 xl:h-[90%] xl:my-auto xl:w-[45%]  md:mt-10 md:mb-7">
-        <div className="text-center text-white lg:text-3xl lg:mt-3 py-7 lg:py-4 md:text-2xl md:mt-1 md:text-green-500 lg:text-yellow-400 xl:text-red-400">
+      <div className=" mt-10 w-[90%] h-auto  mx-auto sm:h-[75%]  sm:mb-1 lg:h-[80%] sm:mt-16  md:w-[95%] md:h-[80%] sm:w-[50%]  text-white rounded-lg shadow-2xl sm:ml-10  lg:w-[45%]  lg:mb-5 lg:ml-10 md:ml-1 border xl:mr-10 lg:mt-16  md:mr-8 xl:h-[90%] xl:my-auto xl:w-[45%]  md:mt-10 md:mb-7">
+        <div className="py-3 text-center text-white lg:text-3xl lg:mt-4 sm:py-7 lg:py-4 md:text-2xl md:mt-1 md:text-green-500 lg:text-yellow-400 xl:text-red-400">
           {" "}
           Welcome To Sign Up Page
         </div>
-        <div className="w-1/2 mb-2 ml-10 md:mb-2">
-          <div>
-            <label className="mt-2 lg:text-lg sm:text-base md:text-base">
-              Name
-            </label>
-          </div>
-
+        <div className="grid w-[60%] gap-3 mb-2 ml-10 md:mb-2 lg:gap-4">
           <div>
             <UserInputComp
               ref={nameInput}
               input={{
                 type: "text",
-                placeholder: "Name",
+                placeholder: "Full Name",
                 className:
-                  "px-3 lg:py-2 mt-1 rounded-lg  bg-transparent  border border-red-200 w-full md:py-1 text-gray-100",
+                  "px-3 lg:py-2 mt-1 py-0.5 rounded-lg  bg-transparent  border border-red-200 w-full md:py-1 text-gray-100",
               }}
             />
-          </div>
-
-          <div>
-            <label className="mt-2 text-lg sm:text-base md:text-base">
-              Email
-            </label>
           </div>
 
           <div>
@@ -127,15 +118,9 @@ const UserSignUp = () => {
                 type: "email",
                 placeholder: "Email",
                 className:
-                  "px-3 lg:py-2 mt-1 rounded-lg  bg-transparent border border-red-200 w-full md:py-1 text-gray-100",
+                  "px-3 lg:py-2 mt-1 py-0.5 rounded-lg  bg-transparent border border-red-200 w-full md:py-1 text-gray-100",
               }}
             />
-          </div>
-
-          <div>
-            <label className="mt-2 lg:text-lg sm:text-base md:text-base">
-              Password
-            </label>
           </div>
 
           <div>
@@ -145,7 +130,19 @@ const UserSignUp = () => {
                 type: "password",
                 placeholder: "Password",
                 className:
-                  "px-3 lg:py-2 mt-1 rounded-lg  bg-transparent border border-red-200 w-full md:py-1 text-gray-100",
+                  "px-3 lg:py-2 mt-1 py-0.5 rounded-lg  bg-transparent border border-red-200 w-full md:py-1 text-gray-100",
+              }}
+            />
+          </div>
+
+          <div>
+            <UserInputComp
+              ref={phoneInput}
+              input={{
+                type: "number",
+                placeholder: "Phone ",
+                className:
+                  "px-3 lg:py-2 mt-1 py-0.5 rounded-lg  bg-transparent border border-red-200 w-full md:py-1 text-gray-100",
               }}
             />
           </div>

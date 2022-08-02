@@ -12,7 +12,7 @@ const ResetPassword = (props) => {
 
   return (
     <Fragment>
-      <div className="grid grid-flow-row ml-2 translate-y-4 sm:ml-8 h-28">
+      <div className="grid grid-flow-row sm:w-[60%] ml-6 sm:translate-y-4 sm:ml-8 h-28">
         <div className="grid grid-flow-row gap-2">
           <div className="grid grid-flow-row ">
             <div>
@@ -20,7 +20,13 @@ const ResetPassword = (props) => {
                 Current Password
               </label>
             </div>
-            <div>
+            <div className="flex">
+              <input
+                className="w-[60%] sm:w-[60%] px-3 py-4 text-sm text-white bg-transparent border border-white rounded-md lg:text-base lg:w-56 h-7 xl:h-9 xl:w-64"
+                ref={props.currPassInput}
+                type={reveal}
+              />
+
               <div>
                 <svg
                   onClick={handleReveal}
@@ -33,27 +39,27 @@ const ResetPassword = (props) => {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="absolute w-4 h-4 text-white transform translate-x-40 translate-y-2 lg:translate-x-48 xl:translate-x-56"
+                  className="absolute w-4 h-4 text-white transform -translate-x-5 translate-y-2"
                 >
                   <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                   <line x1="1" y1="1" x2="23" y2="23"></line>
                 </svg>
               </div>
-
-              <input
-                className="w-48 px-3 py-4 text-sm text-white bg-transparent border border-white rounded-md lg:text-base lg:w-56 h-7 xl:h-9 xl:w-64"
-                ref={props.currPassInput}
-                type={reveal}
-              />
             </div>
           </div>
+
           <div className="grid grid-flow-row">
             <div>
               <p className="text-sm text-white md:text-base xl:text-lg ">
                 New Password
               </p>
             </div>
-            <div>
+            <div className="flex ">
+              <input
+                type={reveal}
+                ref={props.newPassInput}
+                className="w-[60%] px-3 py-4 text-sm text-white bg-transparent border border-white rounded-md lg:text-base lg:w-56 h-7 xl:h-9 xl:w-64 "
+              />
               <div>
                 <svg
                   onClick={handleReveal}
@@ -66,18 +72,12 @@ const ResetPassword = (props) => {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="absolute w-4 h-4 text-white transform translate-x-40 translate-y-2 lg:translate-x-48 xl:translate-x-56"
+                  className="absolute w-4 h-4 text-white transform -translate-x-5 translate-y-2"
                 >
                   <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                   <line x1="1" y1="1" x2="23" y2="23"></line>
                 </svg>
               </div>
-
-              <input
-                type={reveal}
-                ref={props.newPassInput}
-                className="w-48 px-3 py-4 text-sm text-white bg-transparent border border-white rounded-md lg:text-base lg:w-56 h-7 xl:h-9 xl:w-64 "
-              />
             </div>
           </div>
         </div>
@@ -85,7 +85,7 @@ const ResetPassword = (props) => {
         <div>
           <button
             onClick={props.saveHandler}
-            className="px-3 py-0.5 mt-5 text-lg text-white bg-blue-500 border rounded-lg sm:text-xl sm:py-1 sm:px-6 hover:bg-blue-600"
+            className="px-3 py-0.5 mt-2 text-lg text-white bg-blue-500 border rounded-lg sm:text-xl sm:py-1 sm:px-6 hover:bg-blue-600"
           >
             Save
           </button>

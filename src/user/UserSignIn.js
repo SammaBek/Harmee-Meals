@@ -108,7 +108,7 @@ const UserSignIn = () => {
           isLoading ? "animate-pulse" : ""
         }`}
       >
-        <div className="p-2 mx-auto sm:w-[50%] xl:my-auto mt-20 mb-3 border  h-80 lg:w-[40%] xl:w-[35%]  w-80 md:w-[50%] md:h-96 rounded-xl">
+        <div className="p-2 mx-auto sm:w-[50%] xl:my-auto mt-20 mb-3 border  h-80 lg:w-[40%] xl:w-[35%]  w-[85%] md:w-[50%] md:h-96 rounded-xl">
           <div className="py-3 mt-4 text-center md:py-5">
             <span className="text-xl text-white md:text-2xl">Welcome to </span>{" "}
             <span className="text-xl text-green-400 md:text-2xl ">

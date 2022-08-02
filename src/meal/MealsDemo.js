@@ -22,6 +22,7 @@ const MealsDemo = (props) => {
   const dispatch = useDispatch();
 
   const isError = useSelector((state) => state.error.isError);
+  const userId = useSelector((state) => state.sign.userId);
   const history = useHistory();
 
   const [Meals, setMeals] = useState([]);
@@ -34,10 +35,11 @@ const MealsDemo = (props) => {
         // ${localStorage.getItem("token")}
         const Req = await axios({
           method: "GET",
-          url: "http://localhost:8000/api/meals",
+          url: `http://localhost:8000/api/meals/myproducts/${userId}`,
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },
         });
-        setMeals(Req.data.meal);
+        console.log(Req);
+        setMeals(Req.data.user.products);
         setIsLoading(false);
       } catch (err) {
         console.log(err.response.data.message);
@@ -54,24 +56,27 @@ const MealsDemo = (props) => {
     <section>
       {isLoading && <Spinners />}
       {isError && <ErrorModal />}
-      {!isLoading &&
-        Meals.map((item) => {
-          return (
-            <MealItems
-              key={item.id}
-              name={item.name}
-              price={item.price}
-              description={item.description}
-              status={item.status}
-              deadline={item.productDeadline}
-              catagory={item.productCatagory}
-              image={item.image}
-              postedBy={item.owner.userName}
-              ownerId={item.owner._id}
-              prodId={item.id}
-            />
-          );
-        })}
+      <div className="grid h-screen overflow-y-auto lg:grid-cols-2 w-[94%] mx-auto md:ml-2 md:w-[80%] lg:w-[98%]">
+        {!isLoading &&
+          Meals.map((item) => {
+            return (
+              <MealItems
+                key={item.id}
+                name={item.name}
+                price={item.price}
+                description={item.description}
+                status={item.status}
+                deadline={item.productDeadline}
+                catagory={item.productCatagory}
+                image={item.image}
+                postedBy={item.owner.userName}
+                ownerId={item.owner._id}
+                prodId={item.id}
+                specs={item}
+              />
+            );
+          })}
+      </div>
     </section>
   );
 };

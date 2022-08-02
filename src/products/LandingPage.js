@@ -55,42 +55,38 @@ const LandingPage = () => {
     dispatch(SignActions.setSearched({ search: search.current.value }));
     history.push("/productDetailPage");
   };
+
+  const searchKeyHandler = (event) => {
+    if (event.key === "Enter") {
+      dispatch(SignActions.setSearched({ search: search.current.value }));
+      history.push("/productDetailPage");
+    }
+  };
+
+  const filterHandler = (cat) => {
+    dispatch(SignActions.setCatagories({ catagories: cat }));
+    console.log(cat);
+    history.push("/productDetailPage");
+  };
   return (
     <div className="w-full min-h-screen ">
       <div className="grid h-20 grid-flow-col bg-green-600 md:h-60 lg:h-72 xl:h-80 sm:h-40">
-        <div>
+        <div className="">
           <img
-            className="transform translate-y-0.5 sm:translate-y-1 sm:h-40 h-20 md:translate-y-1.5 md:h-60 md:w-72 lg:h-72 xl:h-80 xl:w-80"
-            src={shopper1}
+            className="h-20 xl:h-80 lg:h-72 sm:h-40 md:w-72 lg:w-80 md:h-60"
+            src={shopper3}
             alt="pic"
           />
         </div>
 
-        <div className="flex my-auto">
-          <div>
+        <div className="flex my-auto ">
+          <div className="flex">
             <input
               ref={search}
-              className="flex w-64 h-8 px-3 py-1 text-sm rounded-lg sm:mx-auto sm:text-xs sm:h-9 sm:w-72 md:text-base lg:h-16 md:w-80 md:h-14 lg:w-96"
+              className="flex w-64 h-8 px-3 py-1 text-sm text-center rounded-lg lg:text-base sm:mx-auto sm:text-xs sm:h-9 sm:w-72 md:text-base lg:h-16 md:w-80 md:h-14 lg:w-96"
               placeholder="What are you looking for?"
+              onKeyPress={searchKeyHandler}
             />
-          </div>
-
-          <div onClick={searchHandler} className="">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-4 h-4 text-green-300 transform -translate-x-10 translate-y-2 md:translate-y-4 sm:w-5 sm:h-5 sm:translate-y-2"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
           </div>
         </div>
 
@@ -109,7 +105,12 @@ const LandingPage = () => {
             Filter By Catagory
           </h1>
           <div className="flex w-full gap-8 ml-1 overflow-x-auto text-sm sm:text-base sm:gap-0 sm:grid sm:grid-flow-row">
-            <div className="sm:flex sm:gap-2 sm:hover:bg-gray-300">
+            <div
+              onClick={() => {
+                filterHandler("Vehicles");
+              }}
+              className="sm:flex sm:gap-2 sm:hover:bg-gray-300"
+            >
               <img
                 className="w-16 h-16 md:w-12 md:h-12"
                 src={vehicle}
@@ -117,7 +118,12 @@ const LandingPage = () => {
               />
               <span className="my-auto md:text-base">Vehicles</span>
             </div>
-            <div className="sm:flex sm:gap-2 sm:hover:bg-gray-300">
+            <div
+              onClick={() => {
+                filterHandler("Electronics");
+              }}
+              className="sm:flex sm:gap-2 sm:hover:bg-gray-300"
+            >
               <img
                 className="w-16 h-16 md:w-12 md:h-12"
                 src={electronics}
@@ -125,7 +131,12 @@ const LandingPage = () => {
               />
               <span className="my-auto md:text-base">Electronics</span>
             </div>
-            <div className="sm:flex sm:gap-2 sm:hover:bg-gray-300">
+            <div
+              onClick={() => {
+                filterHandler("Clothing");
+              }}
+              className="sm:flex sm:gap-2 sm:hover:bg-gray-300"
+            >
               <img
                 className="w-16 h-16 md:w-12 md:h-12"
                 src={clothing}
@@ -133,7 +144,12 @@ const LandingPage = () => {
               />
               <span className="my-auto md:text-base">Clothing</span>
             </div>
-            <div className="sm:flex sm:gap-2 sm:hover:bg-gray-300">
+            <div
+              onClick={() => {
+                filterHandler("HomeFurniture");
+              }}
+              className="sm:flex sm:gap-2 sm:hover:bg-gray-300"
+            >
               <img
                 className="w-16 h-16 md:w-12 md:h-12"
                 src={homeFurniture}
@@ -141,17 +157,20 @@ const LandingPage = () => {
               />
               <span className="my-auto md:text-base">Home Furnitures</span>
             </div>
-            <div className="sm:flex sm:gap-2 sm:hover:bg-gray-300">
+            <div
+              onClick={() => {
+                filterHandler("Gym");
+              }}
+              className="sm:flex sm:gap-2 sm:hover:bg-gray-300"
+            >
               <img className="w-16 h-16 md:w-12 md:h-12" src={Gym} alt="pic" />
               <span className="my-auto md:text-base">Gym Equipments</span>
             </div>
           </div>
         </div>
-        <div className="grid  md:w-[75%] sm:w-[75%] p-1 xl:w-[70%] h-screen sm:grid-cols-3 gap-1 overflow-y-auto sm:bg-gray-200 xl:p-2 mt-3 sm:mt-0 grid-flow-row w-[100%]">
+        <div className="grid  md:w-[75%] lg:w-[80%] sm:w-[75%] p-1 xl:w-[75%] h-screen sm:grid-cols-3 gap-1 overflow-y-auto  xl:p-2 mt-3 sm:mt-0 grid-flow-row w-[100%]">
           {products.map((p) => {
-            return (
-              <ProductDetail image={p.image} name={p.name} price={p.price} />
-            );
+            return <ProductDetail key={p.id} prod={p} />;
           })}
         </div>
       </div>
