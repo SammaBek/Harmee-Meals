@@ -20,6 +20,7 @@ const Message = createSlice({
       state.detailMessage = !state.detailMessage;
     },
     setNumMessage(state, action) {
+      console.log(`called by ${action.payload.caller}`);
       state.numMessage = action.payload.numMessage;
     },
   },

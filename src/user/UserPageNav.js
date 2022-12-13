@@ -19,8 +19,8 @@ const UserPageNav = (props) => {
   };
 
   return (
-    <div className={` `}>
-      <div className="grid px-4 sm:hidden">
+    <div className="">
+      {/* <div className="grid px-4 sm:hidden">
         {!show && (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -58,11 +58,9 @@ const UserPageNav = (props) => {
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         )}
-      </div>
+      </div> */}
 
-      <div className="sm:hidden">{show && <Nav />}</div>
-
-      <div className="hidden sm:block">
+      <div className="">
         <Nav />
       </div>
     </div>

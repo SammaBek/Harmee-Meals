@@ -71,7 +71,11 @@ const EditProduct = (props) => {
     try {
       Req = await axios({
         method: "PATCH",
-        url: `http://localhost:8000/api/meals/${props.product.id}`,
+        url: `${
+          process.env.NODE_ENV === "production"
+            ? process.env.REACT_APP_BACKEND_URL
+            : "http://localhost:8000/api"
+        }/meals/${props.product.id}`,
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
         data: finalObj,
       });
@@ -89,16 +93,19 @@ const EditProduct = (props) => {
   };
   return (
     <div className="fixed inset-0 top-0 left-0 right-0 z-50 flex bg-black bg-opacity-60">
-      <div className="grid h-[90%] mt-12 w-[98%]   sm:h-[90%] md:h-[90%] lg:h-[90%] overflow-y-auto sm:mt-14   px-3 sm:w-[80%] py-10 mx-auto md:mt-14 bg-green-50 bg-opacity-70 rounded-lg shadow-2xl ">
+      <div className="grid h-[90%] mt-12 w-[98%]   sm:h-[90%] md:h-[90%] lg:h-[90%] overflow-y-auto sm:mt-14   px-3 sm:w-[85%] py-5 sm:py-10 mx-auto md:mt-14 bg-green-50 bg-opacity-70 rounded-lg shadow-2xl ">
         <div className=" sm:flex sm:gap-7">
-          <div className=" sm:w-[85%] md:w-[70%] lg:w-[90%] ">
-            <img
-              className="rounded-md xl:w-[80%] sm:h-40 md:h-44 lg:h-52 sm:w-[100%] md:w-72 lg:w-[85%]  h-40 mx-auto sm:ml-0 xl:h-56 xl:ml-1 mb-1 md:mb-0"
-              src={`http://localhost:8000/${props.product.image}`}
-              alt="pic"
-            ></img>
+          <div className=" w-[65%] sm:w-[70%]  md:w-[70%] lg:w-[55%] xl:w-[45%] mx-auto sm:ml-0">
+            <div className=" aspect-w-3 aspect-h-2">
+              <img
+                className="object-cover rounded-lg"
+                src={`${process.env.REACT_APP_AWS_S3_BUCKET}/${props.product.image[0]}`}
+                alt="pic"
+              ></img>
+            </div>
           </div>
-          <div className=" w-[100%] grid grid-flow-row gap-1 md:h-60">
+
+          <div className=" w-[100%] grid grid-flow-row gap-1 md:h-60 mt-5 sm:mt-0">
             <div className="flex gap-5 border border-t-0 border-l-0 border-r-0 sm:text-sm md:text-base">
               <div className="my-auto ">
                 <label className="font-serif sm:font-bold ">Name:</label>
@@ -163,7 +170,7 @@ const EditProduct = (props) => {
           </div>
         </div>
 
-        <div className="flex gap-3 mb-3 ml-6 sm:ml-0">
+        <div className="flex gap-3 mb-3 ml-6 sm:ml-0 sm:mt-3">
           <div className="transform translate-y-1 lg:text-lg">Catagory*</div>
           <div>
             <Select

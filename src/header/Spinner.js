@@ -1,10 +1,10 @@
 const Spinner = () => {
   return (
-    <div className=" mt-36">
-      <div className="flex justify-center w-1/4 mx-auto my-auto bg-orange-100 rounded-lg justify-items-center">
+    <div className="fixed inset-0 top-0 left-0 right-0 z-50 flex items-center justify-center bg-gray-200 bg-opacity-30">
+      <div className="flex ">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="w-6 h-6 animate-spin"
+          className="w-8 h-8 text-cyan-800 animate-spin sm:w-14 sm:h-14"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -16,7 +16,10 @@ const Spinner = () => {
             d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"
           />
         </svg>
-        Processing...
+        <span className="my-auto text-base sm:text-lg text-cyan-800">
+          {" "}
+          Processing...
+        </span>
       </div>
     </div>
   );

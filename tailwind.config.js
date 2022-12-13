@@ -6,5 +6,8 @@ module.exports = {
     },
     extend: {},
   },
-  plugins: [require("tailwindcss-debug-screens")],
+  plugins: [
+    require("tailwindcss-debug-screens"),
+    require("@tailwindcss/aspect-ratio"),
+  ],
 };

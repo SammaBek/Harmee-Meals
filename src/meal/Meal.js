@@ -26,7 +26,13 @@ const Meal = () => {
     const getData = async () => {
       try {
         setIsLoading(true);
-        const Req = await axios.get("http://localhost:8000/api/meals");
+        const Req = await axios.get(
+          `${
+            process.env.NODE_ENV === "production"
+              ? process.env.REACT_APP_BACKEND_URL
+              : "http://localhost:8000/api"
+          }/meals`
+        );
         console.log(Req);
         setMeals(Req.data.meal);
         setIsLoading(false);

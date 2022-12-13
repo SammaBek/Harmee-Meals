@@ -39,14 +39,18 @@ const ApproveBid = (props) => {
   const [loading, setLoading] = useState(false);
   console.log(props.bidder, props.userId);
 
-  dispatch(MessageActions.setNumMessage({ numMessage: 0 }));
   useEffect(() => {
     const getChat = async () => {
       setLoading(true);
+
       try {
         const chat = await axios({
           method: "POST",
-          url: "http://localhost:8000/api/users/getChat",
+          url: `${
+            process.env.NODE_ENV === "production"
+              ? process.env.REACT_APP_BACKEND_URL
+              : "http://localhost:8000/api"
+          }/users/getChat`,
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },
           data: { user1: props.bidder, user2: props.userId },
         });
@@ -96,7 +100,11 @@ const ApproveBid = (props) => {
     sendRequest(
       {
         method: "POST",
-        url: "http://localhost:8000/api/users/sendMessage",
+        url: `${
+          process.env.NODE_ENV === "production"
+            ? process.env.REACT_APP_BACKEND_URL
+            : "http://localhost:8000/api"
+        }/users/sendMessage`,
         data: msg,
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       },
@@ -111,12 +119,12 @@ const ApproveBid = (props) => {
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-70 ">
       <div className="flex items-center justify-center ">
-        <div className="mt-20 rounded-lg shadow-2xl borde sm:mt-28 w-72 bg-gray-50 md:w-96 lg:h-96">
+        <div className="mt-20 rounded-lg shadow-2xl h-96 borde sm:mt-28 w-[85%] bg-gray-50 sm:w-96 lg:h-96">
           <div className="h-6 text-center rounded-lg text-gray-50 bg-slate-700">
             {props.name}
           </div>
 
-          <div className={` overflow-y-auto  bg-gray-50 sm:h-60 h-52 `}>
+          <div className={` overflow-y-auto  bg-gray-50 sm:h-60 h-60 `}>
             {loading && (
               <div>
                 <Spinner />
@@ -134,7 +142,7 @@ const ApproveBid = (props) => {
                     <div
                       className={`grid  h-auto grid-flow-col w-auto gap-3 p-1 rounded-lg ${
                         p.sender === userId
-                          ? "bg-blue-600 object-none object-right"
+                          ? "bg-gray-600 object-none object-right"
                           : "bg-gray-300"
                       }`}
                     >
@@ -142,7 +150,7 @@ const ApproveBid = (props) => {
                         <div className="">
                           <img
                             className="w-5 h-5 rounded-full lg:w-6 lg:h-6"
-                            src={`http://localhost:8000/${
+                            src={`${process.env.REACT_APP_AWS_S3_BUCKET}/${
                               p.image ? p.image : ""
                             }`}
                             alt="pic"
@@ -166,22 +174,22 @@ const ApproveBid = (props) => {
 
             <div ref={messagesEndRef} />
           </div>
-          <div className="mt-3 bg-gray-50">
+          <div className="mt-6 sm:mt-3 bg-gray-50">
             <input
-              className="px-3 py-2 mb-1 ml-2 bg-transparent border border-gray-500 rounded-xl w-80"
+              className="px-3 py-2 mb-1 ml-2 bg-transparent border border-gray-500 rounded-xl w-72"
               ref={message}
             />
           </div>
 
           <button
             onClick={sendHandler}
-            className="px-4 py-1 mt-1 mb-1 ml-2 bg-green-400 rounded-lg text-gray-50"
+            className="px-5 py-1 mt-1 mb-1 ml-2 bg-green-800 rounded-lg lg:px-6 text-gray-50"
           >
             Send
           </button>
           <button
             onClick={cancelHandler}
-            className="px-3 py-1 mt-1 bg-red-400 rounded-lg text-gray-50 ml-7"
+            className="px-5 py-1 mt-1 bg-red-800 rounded-lg lg:px-6 text-gray-50 ml-7"
           >
             Cancel
           </button>

@@ -28,12 +28,20 @@ const Message = () => {
   const [message, setMessage] = useState([]);
   console.log(myUser);
 
+  dispatch(
+    MessageActions.setNumMessage({ numMessage: 0, caller: "Message.js" })
+  );
+
   useEffect(() => {
     const getData = async () => {
       try {
         const Req = await axios({
           method: "POST",
-          url: "http://localhost:8000/api/users/getChats",
+          url: `${
+            process.env.NODE_ENV === "production"
+              ? process.env.REACT_APP_BACKEND_URL
+              : "http://localhost:8000/api"
+          }/users/getChats`,
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },
           data: { myUser },
         });
@@ -61,8 +69,8 @@ const Message = () => {
   };
   return (
     <Fragment>
-      <div className="fixed inset-0 bg-gray-800 bg-opacity-70">
-        <div className=" bg-gray-100 rounded-lg w-[83%] sm:w-[60%] lg:w-96 h-[60%] mx-auto mt-14">
+      <div className="fixed inset-0 z-50 bg-gray-800 bg-opacity-70">
+        <div className="  bg-gray-100 rounded-lg w-[83%] sm:w-[60%] lg:w-[37%] h-[60%] xl:h-[55%] mx-auto mt-14">
           <div className="h-6 rounded-lg bg-slate-700">
             <div className="flex gap-2">
               <div>
@@ -103,7 +111,7 @@ const Message = () => {
           </div>
           <div className="ml-4 text-xl text-gray-600">Messenger</div>
 
-          <div className="h-56 overflow-visible overflow-y-auto">
+          <div className="h-56 overflow-visible overflow-y-auto lg:h-[90%]">
             {message &&
               message.map((msg) => {
                 let newMessage;

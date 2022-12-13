@@ -200,7 +200,9 @@ const VehiclesSpecification = (props) => {
               isClearable
               defaultValue={{
                 value: `${props.editSpecs ? props.editSpecs.specs.make : null}`,
-                label: `${props.editSpecs ? props.editSpecs.specs.make : null}`,
+                label: `${
+                  props.editSpecs ? props.editSpecs.specs.make : "select"
+                }`,
               }}
             />
           </div>
@@ -219,7 +221,9 @@ const VehiclesSpecification = (props) => {
 
               defaultValue={{
                 value: `${props.editSpecs ? props.editSpecs.specs.fuel : null}`,
-                label: `${props.editSpecs ? props.editSpecs.specs.fuel : null}`,
+                label: `${
+                  props.editSpecs ? props.editSpecs.specs.fuel : "select"
+                }`,
               }}
             />
           </div>
@@ -238,7 +242,9 @@ const VehiclesSpecification = (props) => {
                   props.editSpecs ? props.editSpecs.specs.transmission : null
                 }`,
                 label: `${
-                  props.editSpecs ? props.editSpecs.specs.transmission : null
+                  props.editSpecs
+                    ? props.editSpecs.specs.transmission
+                    : "select"
                 }`,
               }}
             />

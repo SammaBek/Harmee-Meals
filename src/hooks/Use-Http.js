@@ -25,7 +25,10 @@ const useHttp = () => {
     } catch (err) {
       console.log(err.response);
       const errMsg = err.response.data.message;
-      dispatch(ErrorAction.setError({ ErrorMessage: errMsg }));
+      dispatch(ErrorAction.setError({ errorMessage: errMsg }));
+      // if (reqConfig.pageTo) {
+      //   dispatch(ErrorAction.setPageTo({ pageTo: reqConfig.pageTo }));
+      // }
     }
   };
 

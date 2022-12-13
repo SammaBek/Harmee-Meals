@@ -7,7 +7,7 @@ const ImageUploader = (props) => {
   const [isValid, setIsValid] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   let pickedFile, valid;
-
+  console.log(props.type);
   useEffect(() => {
     if (!file) {
       return;
@@ -44,7 +44,7 @@ const ImageUploader = (props) => {
   };
 
   return (
-    <div className="flex justify-center justify-items-center">
+    <div className="">
       <div className="grid grid-flow-row gap-5 ">
         <input
           type="file"
@@ -52,21 +52,22 @@ const ImageUploader = (props) => {
           className="hidden "
           ref={filePickerRef}
           onChange={pickedHandler}
+          multiple
         />
 
         <img
           alt="preview"
           src={`${imageUrl ? imageUrl : props.img}`}
-          className={`p-1 border ${
+          className={`p-1 border object-cover ${
             imageUrl ? `${props.cssClass}` : `${props.cssClass}`
           }`}
         />
 
-        <div>
+        <div className="mx-auto">
           <button
             type="button"
             onClick={pickImageHandler}
-            className="w-24 mb-5 ml-5 text-gray-100 bg-blue-500 rounded-lg h-7 sm:w-24 lg:text-base sm:text-sm hover:bg-blue-600"
+            className="w-24 mb-5 font-mono text-white bg-green-700 rounded-lg h-7 sm:w-24 lg:text-base sm:text-sm hover:bg-blue-600"
           >
             Add Image
           </button>

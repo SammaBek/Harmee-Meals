@@ -10,6 +10,8 @@ import Cookies from "js-cookie";
 import VehiclesSpecification from "../productSpecification/VehiclesSpecification";
 import ElectronicsSpecification from "../productSpecification/ElectronicsSpecification";
 import ApproveBid from "../user/ApproveBid";
+import { ErrorAction } from "../store/Error-Slice";
+import ErrorModal from "../modal/ErrorModal";
 
 const ProductDetailPage = (props) => {
   const [specification, setSpecification] = useState();
@@ -29,14 +31,16 @@ const ProductDetailPage = (props) => {
   let specs = {};
   const [key, setKeys] = useState();
   const [show, setSHow] = useState(false);
+  const isError = useSelector((state) => state.error.isError);
 
   const history = useHistory();
 
   const searchHandler = (event) => {
-    event.preventDefault();
-    console.log("searched", searchInput.current.value);
-    Dispatch(SignActions.setSearched(searchInput.current.value));
-    setSearch(searchInput.current.value);
+    if (event.key === "Enter") {
+      console.log("searched", searchInput.current.value);
+      Dispatch(SignActions.setSearched({ search: searchInput.current.value }));
+      setSearch(searchInput.current.value);
+    }
   };
 
   console.log(props.search);
@@ -60,7 +64,11 @@ const ProductDetailPage = (props) => {
         try {
           const Data = await axios({
             method: "GET",
-            url: `http://localhost:8000/api/meals/${props.prodId}`,
+            url: `${
+              process.env.NODE_ENV === "production"
+                ? process.env.REACT_APP_BACKEND_URL
+                : "http://localhost:8000/api"
+            }/meals/${props.prodId}`,
             headers: { Authorization: `Bearer ${Cookies.get("token")}` },
           });
           console.log(Data);
@@ -69,7 +77,15 @@ const ProductDetailPage = (props) => {
 
           setKeys(key);
         } catch (err) {
-          console.log(err);
+          console.log(err.response.data);
+          Dispatch(
+            ErrorAction.setError({
+              errorMessage:
+                "Either you are not Authorized or your session expired. Sign In Again",
+            })
+          );
+
+          Dispatch(ErrorAction.setPageTo({ pageTo: "signin" }));
         }
       }
     };
@@ -89,35 +105,19 @@ const ProductDetailPage = (props) => {
   console.log(key);
   return (
     <div className="grid p-2 mb-2">
+      {isError && <ErrorModal />}
       <div className="flex h-20 mx-auto mt-5">
         <div>
           <input
             ref={searchInput}
-            className="flex h-10 px-3 py-1 text-lg border border-gray-300 rounded-lg w-72 lg:w-96 lg:h-14"
+            className="flex h-10 px-3 py-1 text-lg border border-gray-300 rounded-lg w-72 lg:w-96 lg:h-14 text-cyan-900 md:mt-2 focus:ring-blue-slate-400 focus:outline focus:outline-slate-400"
             placeholder="What are you looking for?"
+            onKeyPress={searchHandler}
           />
         </div>
-
-        <div onClick={searchHandler} className="">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="w-5 h-5 text-green-300 transform -translate-x-10 translate-y-3 lg:w-6 lg:h-6 lg:translate-y-4"
-          >
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </div>
       </div>
-      <div className="gap-10 sm:gap-0 sm:flex ">
-        <div className="grid grid-flow-row sm:h-screen md:w-[65%] ">
+      <div className="grid gap-2 sm:gap-0">
+        <div className="grid max-h-80 md:h-auto  sm:h-72 md:w-[70%] lg:w-[63%]">
           <div className="text-lg font-bold text-center sm:ml-4 sm:text-2xl sm:mt-5 ">
             {` ${
               data.length === 0
@@ -126,7 +126,7 @@ const ProductDetailPage = (props) => {
             } `}
           </div>
           {data.length !== 0 && (
-            <div className="flex h-64 gap-2  mt-2 overflow-x-auto sm:overflow-x-hidden md:w-[100%]  sm:w-[100%] sm:h-screen sm:grid sm:ml-2  sm:overflow-y-auto">
+            <div className="  md:h-auto lg:h-auto h-auto gap-2 w-[100%]  mt-2  md:w-[100%] lg:w-[100%]  sm:w-[74%]  sm:grid sm:ml-2  ">
               <SearchResult
                 key={data.id}
                 price={data.price}
@@ -141,7 +141,7 @@ const ProductDetailPage = (props) => {
                   <ApproveBid
                     make={make}
                     name={data.owner.userName}
-                    bidder={data.id}
+                    bidder={data.owner.id}
                     userId={userId}
                   />
                 </div>
@@ -152,14 +152,14 @@ const ProductDetailPage = (props) => {
 
         {key && (
           <div
-            className={` p-2 mt-3 sm:p-0 sm:ml-[1%] sm:mt-20 h-2/3 sm:border sm:border-gray-300 sm:border-l-0 sm:border-b-0 sm:border-t-0 md:w-[35%] lg:w-[25%] xl:w-[30%]   sm:w-[40%]`}
+            className={` p-2 mt-3 sm:p-0 sm:ml-20 w-[80%]  sm:mt-10 h-2/3  md:w-[35%] lg:w-[35%] xl:w-[30%]   sm:w-[40%]`}
           >
             <div className={`flex gap-7  ${show ? "mt-16 sm:mt-0" : ""}`}>
               <div>
                 {key.map((k) => {
                   return (
                     <div className="mt-2">
-                      <label className="text-lg ">{k}:</label>
+                      <label className="text-base lg:text-lg ">{k}:</label>
                     </div>
                   );
                 })}
@@ -169,7 +169,9 @@ const ProductDetailPage = (props) => {
                 {key.map((k) => {
                   return (
                     <div className="mt-2">
-                      <label className="text-lg ">{data.specs[k]}</label>
+                      <label className="text-base lg:text-lg ">
+                        {data.specs[k]}
+                      </label>
                     </div>
                   );
                 })}

@@ -22,7 +22,11 @@ const Electronics = () => {
       try {
         const Data = await axios({
           method: "GET",
-          url: `http://localhost:8000/api/meals/filterProducts/`,
+          url: `${
+            process.env.NODE_ENV === "production"
+              ? process.env.REACT_APP_BACKEND_URL
+              : "http://localhost:8000/api"
+          }/meals/filterProducts/`,
           params: { productCatagory: "Electronics" },
         });
 
@@ -75,7 +79,11 @@ const Electronics = () => {
     try {
       const Data = await axios({
         method: "GET",
-        url: `http://localhost:8000/api/meals/filterProducts/`,
+        url: `${
+          process.env.NODE_ENV === "production"
+            ? process.env.REACT_APP_BACKEND_URL
+            : "http://localhost:8000/api"
+        }/meals/filterProducts/`,
         params: specs,
       });
 

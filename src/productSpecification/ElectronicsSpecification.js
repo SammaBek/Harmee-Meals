@@ -3,6 +3,7 @@ import Select, { InputActionMeta } from "react-select";
 import PhoneSpecification from "./PhoneSpecification";
 import TvSpecification from "./TvSpecification";
 import LaptopSpecification from "./LaptopSpecification";
+import { useSelector } from "react-redux";
 const ElectronicsSpecification = (props) => {
   console.log(props.type);
 
@@ -17,11 +18,6 @@ const ElectronicsSpecification = (props) => {
     { value: "Laptop", label: "Laptop" },
   ];
 
-  for (let i = 0; i < products.length; i++) {
-    if (products[i].value === props.editSpecs.specs.ElectronicType) {
-      count = i;
-    }
-  }
   const productHandler = (inputValue, { action, prevInputValue }) => {
     const finalSpec = {};
 
@@ -69,25 +65,29 @@ const ElectronicsSpecification = (props) => {
             onChange={productHandler}
             // onInputChange={productHandler}
             isClearable
-            defaultValue={{
-              value: `${
-                props.editSpecs.specs.ElectronicType
-                  ? props.editSpecs.specs.ElectronicType
-                  : products[0]
-              }`,
-              label: `${
-                props.editSpecs.specs.ElectronicType
-                  ? props.editSpecs.specs.ElectronicType
-                  : products[0]
-              }`,
-            }}
+            defaultValue={
+              !props.type === "filter"
+                ? {
+                    value: `${
+                      props.editSpecs
+                        ? props.editSpecs.specs.ElectronicType
+                        : products[0]
+                    }`,
+                    label: `${
+                      props.editSpecs
+                        ? props.editSpecs.specs.ElectronicType
+                        : products[0]
+                    }`,
+                  }
+                : ""
+            }
           />
         </div>
       </div>
       <div
         className={`grid grid-flow-row ${
           elecType ? "block" : "hidden"
-        }  mt-4 mb-2 overflow-y-auto h-80 sm:h-96 sm:w-[80%]`}
+        }  mt-4 mb-2 overflow-y-auto  h-auto sm:w-[80%]`}
       >
         <div>
           {elecType === "Phone" && (
@@ -95,7 +95,7 @@ const ElectronicsSpecification = (props) => {
               <PhoneSpecification
                 type={props.type}
                 getSpec={getSpecification}
-                editPhone={props.editSpecs.specs ? props.editSpecs.specs : null}
+                editPhone={props.editSpecs ? props.editSpecs.specs : null}
               />
             </div>
           )}
@@ -104,7 +104,7 @@ const ElectronicsSpecification = (props) => {
               <TvSpecification
                 type={props.type}
                 getSpec={getSpecification}
-                editTV={props.editSpecs.specs ? props.editSpecs.specs : null}
+                editTV={props.editSpecs ? props.editSpecs.specs : null}
               />
             </div>
           )}
@@ -113,9 +113,7 @@ const ElectronicsSpecification = (props) => {
               <LaptopSpecification
                 type={props.type}
                 getSpec={getSpecification}
-                editLaptop={
-                  props.editSpecs.specs ? props.editSpecs.specs : null
-                }
+                editLaptop={props.editSpecs ? props.editSpecs.specs : null}
               />
             </div>
           )}

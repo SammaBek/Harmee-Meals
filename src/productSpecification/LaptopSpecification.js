@@ -216,7 +216,7 @@ const LaptopSpecification = (props) => {
                 props.editLaptop ? props.editLaptop.laptopBrand : null
               }`,
               label: `${
-                props.editLaptop ? props.editLaptop.laptopBrand : null
+                props.editLaptop ? props.editLaptop.laptopBrand : "select"
               }`,
             }}
           />
@@ -236,7 +236,7 @@ const LaptopSpecification = (props) => {
                 props.editLaptop ? props.editLaptop.laptopScreenSize : null
               }`,
               label: `${
-                props.editLaptop ? props.editLaptop.laptopScreenSize : null
+                props.editLaptop ? props.editLaptop.laptopScreenSize : "select"
               }`,
             }}
           />
@@ -256,7 +256,7 @@ const LaptopSpecification = (props) => {
                 props.editLaptop ? props.editLaptop.laptopProcessor : null
               }`,
               label: `${
-                props.editLaptop ? props.editLaptop.laptopProcessor : null
+                props.editLaptop ? props.editLaptop.laptopProcessor : "select"
               }`,
             }}
           />
@@ -276,7 +276,7 @@ const LaptopSpecification = (props) => {
                 props.editLaptop ? props.editLaptop.laptopStorage : null
               }`,
               label: `${
-                props.editLaptop ? props.editLaptop.laptopStorage : null
+                props.editLaptop ? props.editLaptop.laptopStorage : "select"
               }`,
             }}
           />
@@ -289,9 +289,7 @@ const LaptopSpecification = (props) => {
           type="number"
           className="w-40 h-8 p-1 ml-0 border-2 border-gray-300 rounded-md md:w-48"
           onChange={ramHandler}
-          defaultValue={`${
-            props.editLaptop.laptopRam ? props.editLaptop.laptopRam : null
-          }`}
+          defaultValue={props.editLaptop ? props.editLaptop.laptopRam : null}
         />
       </div>
 
@@ -301,9 +299,7 @@ const LaptopSpecification = (props) => {
           type="text"
           className="w-40 h-8 p-1 ml-0 border-2 border-gray-300 rounded-md md:w-48"
           onChange={modelHandler}
-          defaultValue={`${
-            props.editLaptop.laptopModel ? props.editLaptop.laptopModel : null
-          }`}
+          defaultValue={props.editLaptop ? props.editLaptop.laptopModel : null}
         />
       </div>
     </div>

@@ -3,6 +3,7 @@ import SearchResult from "./SearchResult";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
+import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import VehiclesSpecification from "../productSpecification/VehiclesSpecification";
 import ElectronicsSpecification from "../productSpecification/ElectronicsSpecification";
@@ -18,6 +19,7 @@ const ProductDetailPage = (props) => {
   const [specification, setSpecification] = useState();
   const [catagories, setCatagories] = useState();
   const [finalSpec, setFinalSpec] = useState();
+  const showMessage = useSelector((state) => state.message.showMessage);
 
   const [data, setData] = useState([]);
   const searchInput = useRef();
@@ -27,9 +29,10 @@ const ProductDetailPage = (props) => {
   let specs = {};
 
   const searchHandler = (event) => {
-    event.preventDefault();
-    console.log("searched", searchInput.current.value);
-    setSearch(searchInput.current.value);
+    if (event.key === "Enter") {
+      console.log("searched", searchInput.current.value);
+      setSearch(searchInput.current.value);
+    }
   };
 
   console.log(props.search);
@@ -49,7 +52,11 @@ const ProductDetailPage = (props) => {
         try {
           const Data = await axios({
             method: "GET",
-            url: `http://localhost:8000/api/meals/filterProducts/`,
+            url: `${
+              process.env.NODE_ENV === "production"
+                ? process.env.REACT_APP_BACKEND_URL
+                : "http://localhost:8000/api"
+            }/meals/filterProducts/`,
             params: specs,
           });
 
@@ -69,7 +76,11 @@ const ProductDetailPage = (props) => {
           console.log(search);
           const Data = await axios({
             method: "GET",
-            url: `http://localhost:8000/api/meals/getByName/${search}`,
+            url: `${
+              process.env.NODE_ENV === "production"
+                ? process.env.REACT_APP_BACKEND_URL
+                : "http://localhost:8000/api"
+            }/meals/getByName/${search}`,
             headers: { Authorization: `Bearer ${Cookies.get("token")}` },
           });
           console.log(Data);
@@ -120,7 +131,11 @@ const ProductDetailPage = (props) => {
     try {
       const Data = await axios({
         method: "GET",
-        url: `http://localhost:8000/api/meals/filterProducts/`,
+        url: `${
+          process.env.NODE_ENV === "production"
+            ? process.env.REACT_APP_BACKEND_URL
+            : "http://localhost:8000/api"
+        }/meals/filterProducts/`,
         params: specs,
       });
 
@@ -139,31 +154,14 @@ const ProductDetailPage = (props) => {
         <div>
           <input
             ref={searchInput}
-            className="flex h-10 px-3 py-1 text-lg border border-gray-300 rounded-lg w-72 lg:w-96 lg:h-14"
+            className="flex h-10 px-3 py-1 text-lg border border-gray-300 rounded-lg w-72 lg:w-96 lg:h-14 focus:ring-blue-slate-400 focus:outline focus:outline-slate-400"
             placeholder="What are you looking for?"
+            onKeyPress={searchHandler}
           />
-        </div>
-
-        <div onClick={searchHandler} className="">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="w-5 h-5 text-green-300 transform -translate-x-10 translate-y-3 lg:w-6 lg:h-6 lg:translate-y-4"
-          >
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
         </div>
       </div>
       <div className="gap-10 sm:gap-0 sm:flex ">
-        <div className="grid grid-flow-row sm:h-screen md:w-[65%] sm:hidden">
+        <div className="grid sm:h-screen md:w-[65%] sm:hidden ">
           <div className="text-lg font-bold text-center sm:ml-4 sm:text-2xl sm:mt-5 ">
             {` ${
               data.length === 0
@@ -172,17 +170,18 @@ const ProductDetailPage = (props) => {
             } `}
           </div>
           {data.length !== 0 && (
-            <div className="flex h-64 gap-2  mt-2 overflow-x-auto sm:overflow-x-hidden md:w-[100%]  sm:w-[100%] sm:h-screen sm:grid sm:ml-2  sm:overflow-y-auto">
+            <div className=" grid max-h-96 gap-2  w-[95%] mt-2 overflow-y-auto  md:w-[100%]  sm:w-[100%] sm:h-screen sm:grid sm:ml-2  sm:overflow-y-auto">
               {data.length !== 0 &&
                 data.map((item) => {
                   return (
                     <SearchResult
-                      key={item.id}
+                      key={item._id}
                       price={item.price}
                       name={item.name}
                       description={item.description}
                       image={item.image}
                       status={item.status}
+                      prod={item}
                     />
                   );
                 })}
@@ -190,7 +189,11 @@ const ProductDetailPage = (props) => {
           )}
         </div>
 
-        <div className="gap-3 p-2 mt-3 sm:p-0 sm:ml-[1%] sm:mt-20 h-2/3 sm:border sm:border-gray-300 sm:border-l-0 sm:border-b-0 sm:border-t-0 md:w-[35%] lg:w-[25%] xl:w-[30%]   sm:w-[40%]">
+        <div
+          className={`gap-3 p-2 mt-3 sm:p-0 sm:ml-[1%] sm:mt-20 h-2/3 sm:border sm:border-gray-300 sm:border-l-0 sm:border-b-0 sm:border-t-0 md:w-[35%] lg:w-[30%] xl:w-[30%] sm:w-[40%] ${
+            showMessage ? "hidden" : "block"
+          } `}
+        >
           <div className="flex sm:w-72 lg:w-80">
             <div className="my-auto text-base ">Catagory:</div>
             <div className="ml-1 ">
@@ -217,27 +220,28 @@ const ProductDetailPage = (props) => {
           <div className="mt-2 sm:mt-3">
             <button
               onClick={filterHandler}
-              className="w-20 px-3 py-1 bg-red-400 rounded-md "
+              className="px-5 py-1 text-white rounded-md bg-cyan-900"
             >
-              Save
+              Save Search
             </button>
           </div>
         </div>
-        <div className="grid grid-flow-row sm:h-screen md:w-[65%] hidden sm:block">
+        <div className="grid grid-flow-row sm:h-screen md:w-[65%] sm:w-[90%] hidden sm:block">
           <div className="text-lg font-bold text-center sm:ml-4 sm:text-2xl sm:mt-5 ">
             {` ${
               data.length === 0
-                ? "We have no result for your search"
-                : "Here are some Results for your Search"
+                ? "No result for your search"
+                : "Results for your Search"
             } `}
           </div>
           {data.length !== 0 && (
-            <div className="flex h-64 gap-2  mt-2 overflow-x-auto sm:overflow-x-hidden md:w-[100%]  sm:w-[100%] sm:h-screen sm:grid sm:ml-2  sm:overflow-y-auto">
+            <div className="gap-2  mt-2 md:w-[100%]  sm:w-[100%] sm:h-screen  sm:ml-2  overflow-y-auto">
               {data.length !== 0 &&
                 data.map((item) => {
                   return (
                     <SearchResult
-                      key={item.id}
+                      prod={item}
+                      key={item._id}
                       price={item.price}
                       name={item.name}
                       description={item.description}

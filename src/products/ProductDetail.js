@@ -13,17 +13,24 @@ const ProductDetail = (props) => {
   return (
     <div
       onClick={clickHandler}
-      className="grid grid-flow-row lg:ml-1 ml-6 sm:ml-1 w-[75%] sm:h-40 lg:h-60 mb-2 md:h-52  bg-white shadow-2xl border border-gray-100 rounded-lg h-60 md:w-[97%] sm:w-[97%] xl:p-2 xl:h-64 lg:w-[98%] xl:w-[98%]"
+      className="sm:grid sm:grid-flow-row flex h-auto sm:h-auto lg:ml-1 ml-6 sm:ml-1 w-[90%]  lg:h-auto mb-2 bg-white shadow-2xl border border-gray-100 rounded-lg md:w-[97%] sm:w-[97%] xl:p-2 lg:w-[98%] xl:w-[98%] hover:brightness-90"
     >
-      <div className="h-48 md:h-[90%] p-2 w-[100%] sm:w-[100%] sm:h-[80%] md:p-1  md:w-[100%] lg:w-[100%] ">
-        <img
-          className=" w-[100%] h-[95%]   md:w-[96%] sm:h-24 md:h-32 lg:h-44 lg:w-[98%] xl:w-[96%] mx-auto"
-          src={`http://localhost:8000/${props.prod.image}`}
-          alt="pic"
-        />
+      <div className=" w-[60%] sm:w-full py-1">
+        <div className=" aspect-w-3 aspect-h-2 sm:aspect-h-2 sm:aspect-w-3   md:w-[100%] lg:aspect-w-3 lg:aspect-h-2 ">
+          <img
+            className="object-cover mx-auto rounded-lg"
+            src={`https://gabaa-app-resource.s3.amazonaws.com/${props.prod.image[0]}`}
+            alt="pic"
+          />
+        </div>
       </div>
-      <div className="ml-1 sm:text-xs md:text-sm">{props.prod.name}</div>
-      <div className="ml-1 text-green-300 sm:text-xs md:text-sm">{`$${props.prod.price}`}</div>
+
+      <div className="my-auto ">
+        <div className="ml-1 font-mono text-xs text-cyan-900 md:text-sm ">
+          {props.prod.name}
+        </div>
+        <div className="p-1 ml-1 text-xs text-cyan-900 md:text-sm ">{`$${props.prod.price}`}</div>
+      </div>
     </div>
   );
 };

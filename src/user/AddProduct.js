@@ -1,6 +1,6 @@
 import { useRef, useState, useContext } from "react";
 import ImageUploader from "../utils/ImageUploader";
-import img2 from "../img/img2.jpeg";
+import img2 from "../img/prodPicture.webp";
 import useHttp from "../hooks/Use-Http";
 import Cookies from "js-cookie";
 import Select from "react-select";
@@ -41,7 +41,7 @@ const AddMeal = () => {
   const detailInput = useRef();
   const priceInput = useRef();
   const inputDeadline = useRef();
-  const [image, setImage] = useState();
+  const [images, setImage] = useState([]);
   const [status, setStatus] = useState();
   const [catagories, setCatagories] = useState("HomeAppliance");
 
@@ -51,6 +51,8 @@ const AddMeal = () => {
 
   const submitHandler = async (event) => {
     event.preventDefault();
+
+    console.log(images);
 
     if (
       !productInput.current.value ||
@@ -74,19 +76,27 @@ const AddMeal = () => {
       form.append("description", detailInput.current.value);
       form.append("price", priceInput.current.value);
       form.append("productCatagory", catagories);
-      form.append("image", image);
+
+      for (let i = 0; i < images.length; i++) {
+        form.append("images", images[i]);
+      }
+
       form.append("status", status);
 
       for (var key in specs) {
         form.append(key, specs[key]);
       }
 
-      console.log(product, detail, image, price, catagories);
+      console.log(product, detail, images, price, catagories);
 
       sendRequest(
         {
           method: "POST",
-          url: "http://localhost:8000/api/meals/addproduct",
+          url: `${
+            process.env.NODE_ENV === "production"
+              ? process.env.REACT_APP_BACKEND_URL
+              : "http://localhost:8000/api"
+          }/meals/addproduct`,
           data: form,
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },
         },
@@ -103,7 +113,7 @@ const AddMeal = () => {
   const getImage = (imgs, valid) => {
     console.log(imgs, valid);
 
-    setImage(imgs);
+    setImage((oldArray) => [...oldArray, imgs]);
   };
 
   const listHandler = (event) => {
@@ -124,7 +134,7 @@ const AddMeal = () => {
   };
 
   return (
-    <div className="grid min-h-screen ">
+    <div className="grid min-h-screen">
       {isError && <ErrorModal />}
       <form onSubmit={submitHandler}>
         <div className="w-full gap-5 mt-4 sm:mt-10 sm:flex">
@@ -240,13 +250,36 @@ const AddMeal = () => {
               </div>
             </div>
 
-            <div className="hidden sm:block">
-              <ImageUploader
-                cssClass="rounded-lg w-36 h-36 md:w-24 md:h-24 lg:w-36 lg:h-36"
-                cssClassAfter="rounded-lg w-52 h-52 md:w-24 md:h-24 lg:w-52 lg:h-52"
-                img={img2}
-                onGetImage={getImage}
-              />
+            <div className="hidden w-full overflow-x-auto sm:grid sm:grid-flow-col sm:gap-5 ">
+              <div className=" lg:w-44">
+                <ImageUploader
+                  cssClass="rounded-lg w-36 h-36 md:w-24 md:h-24 lg:w-44 lg:h-36"
+                  cssClassAfter="rounded-lg w-52 h-52 md:w-24 md:h-24 lg:w-52 lg:h-52"
+                  img={img2}
+                  onGetImage={getImage}
+                  type="multiple"
+                />
+              </div>
+
+              <div className=" lg:w-44">
+                <ImageUploader
+                  cssClass="rounded-lg w-36 h-36 md:w-24 md:h-24 lg:w-44 lg:h-36"
+                  cssClassAfter="rounded-lg w-52 h-52 md:w-24 md:h-24 lg:w-52 lg:h-52"
+                  img={img2}
+                  onGetImage={getImage}
+                  type="multiple"
+                />
+              </div>
+
+              <div className="lg:w-44">
+                <ImageUploader
+                  cssClass="rounded-lg w-36 h-36 md:w-24 md:h-24 lg:w-44 lg:h-36"
+                  cssClassAfter="rounded-lg w-52 h-52 md:w-24 md:h-24 lg:w-52 lg:h-52"
+                  img={img2}
+                  onGetImage={getImage}
+                  type="multiple"
+                />
+              </div>
             </div>
 
             <div className="hidden mb-5 sm:block">

@@ -15,12 +15,14 @@ const MessageDetail = (props) => {
       <div
         onClick={detailHandler}
         key={props.msg.createdAt}
-        className="flex gap-4 py-1 hover:bg-slate-200 hover:rounded-lg"
+        className={`flex gap-4 py-1 hover:bg-slate-300 hover:rounded-lg ${
+          !props.msg.seen ? `bg-slate-200 rounded-lg` : "rounded-lg"
+        } `}
       >
         <div className="my-auto ">
           <img
             className="w-10 h-10 rounded-full"
-            src={`http://localhost:8000/${props.msg.image}`}
+            src={`${process.env.REACT_APP_AWS_S3_BUCKET}/${props.msg.image}`}
             alt="pic"
           ></img>
         </div>

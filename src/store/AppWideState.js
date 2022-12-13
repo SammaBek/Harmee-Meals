@@ -28,17 +28,25 @@ const persistNotfConfig = {
   storage,
 };
 
+const persistErrorConfig = {
+  key: "error",
+  version: 1,
+  storage,
+};
+
 const persistedReducer = persistReducer(persistConfig, signReducer);
 const persistedReducerNotf = persistReducer(
   persistNotfConfig,
   NotificationReducer
 );
 
+const persistedReducerError = persistReducer(persistErrorConfig, ErrorReducer);
+
 export const store = configureStore({
   reducer: {
     sign: persistedReducer,
     notf: persistedReducerNotf,
-    error: ErrorReducer,
+    error: persistedReducerError,
     message: messageReducer,
   },
   middleware: (getDefaultMiddleware) =>

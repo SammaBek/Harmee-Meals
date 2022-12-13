@@ -184,7 +184,7 @@ const PhoneSpecification = (props) => {
           onChange={phonesHandler}
           defaultValue={{
             value: `${props.editPhone ? props.editPhone.phoneBrand : null}`,
-            label: `${props.editPhone ? props.editPhone.phoneBrand : null}`,
+            label: `${props.editPhone ? props.editPhone.phoneBrand : "select"}`,
           }}
         />
       </div>
@@ -201,7 +201,9 @@ const PhoneSpecification = (props) => {
               onChange={modelHandler}
               defaultValue={{
                 value: `${props.editPhone ? props.editPhone.phoneModel : null}`,
-                label: `${props.editPhone ? props.editPhone.phoneModel : null}`,
+                label: `${
+                  props.editPhone ? props.editPhone.phoneModel : "select"
+                }`,
               }}
             />
           )}
@@ -214,7 +216,9 @@ const PhoneSpecification = (props) => {
               onChange={modelHandler}
               defaultValue={{
                 value: `${props.editPhone ? props.editPhone.phoneModel : null}`,
-                label: `${props.editPhone ? props.editPhone.phoneModel : null}`,
+                label: `${
+                  props.editPhone ? props.editPhone.phoneModel : "select"
+                }`,
               }}
             />
           )}
@@ -227,7 +231,9 @@ const PhoneSpecification = (props) => {
               onChange={modelHandler}
               defaultValue={{
                 value: `${props.editPhone ? props.editPhone.phoneModel : null}`,
-                label: `${props.editPhone ? props.editPhone.phoneModel : null}`,
+                label: `${
+                  props.editPhone ? props.editPhone.phoneModel : "select"
+                }`,
               }}
             />
           )}
@@ -244,7 +250,9 @@ const PhoneSpecification = (props) => {
           className="ml-0 w-44 md:w-48"
           defaultValue={{
             value: `${props.editPhone ? props.editPhone.phoneStorage : null}`,
-            label: `${props.editPhone ? props.editPhone.phoneStorage : null}`,
+            label: `${
+              props.editPhone ? props.editPhone.phoneStorage : "select"
+            }`,
           }}
         />
       </div>

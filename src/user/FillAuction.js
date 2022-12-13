@@ -52,7 +52,11 @@ const FillAuction = (props) => {
     sendRequest(
       {
         method: "POST",
-        url: "http://localhost:8000/api/meals/makebid",
+        url: `${
+          process.env.NODE_ENV === "production"
+            ? process.env.REACT_APP_BACKEND_URL
+            : "http://localhost:8000/api"
+        }/meals/makebid`,
         data: {
           email,
           price,

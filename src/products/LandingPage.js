@@ -6,10 +6,11 @@ import clothing from "../img/Clothing.png";
 import homeFurniture from "../img/homeFurniture.png";
 import Gym from "../img/GymEquipment.png";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ErrorAction } from "../store/Error-Slice";
 import Cookies from "js-cookie";
 import ProductDetail from "./ProductDetail";
+import ErrorModal from "../modal/ErrorModal";
 
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Route } from "react-router-dom";
@@ -22,6 +23,7 @@ const LandingPage = () => {
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
   const search = useRef();
+  const isError = useSelector((state) => state.error.isError);
 
   const ss = "sam";
 
@@ -31,7 +33,11 @@ const LandingPage = () => {
         // ${localStorage.getItem("token")}
         const Req = await axios({
           method: "GET",
-          url: "http://localhost:8000/api/meals",
+          url: `${
+            process.env.NODE_ENV === "production"
+              ? process.env.REACT_APP_BACKEND_URL
+              : "http://localhost:8000/api"
+          }/meals`,
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },
         });
         setProducts(Req.data.meal);
@@ -70,10 +76,10 @@ const LandingPage = () => {
   };
   return (
     <div className="w-full min-h-screen ">
-      <div className="grid h-20 grid-flow-col bg-green-600 md:h-60 lg:h-72 xl:h-80 sm:h-40">
-        <div className="">
+      <div className="grid h-20 grid-flow-col bg-gradient-to-r from-slate-900 via-slate-700 to-slate-800 md:h-60 lg:h-72 xl:h-80 sm:h-40">
+        <div className=" xl:mt-3 md:mt-4 lg:mt-0">
           <img
-            className="h-20 xl:h-80 lg:h-72 sm:h-40 md:w-72 lg:w-80 md:h-60"
+            className="object-contain h-20 xl:h-80 lg:h-72 sm:h-40 md:w-56 lg:w-80 md:h-60"
             src={shopper3}
             alt="pic"
           />
@@ -83,16 +89,16 @@ const LandingPage = () => {
           <div className="flex">
             <input
               ref={search}
-              className="flex w-64 h-8 px-3 py-1 text-sm text-center rounded-lg lg:text-base sm:mx-auto sm:text-xs sm:h-9 sm:w-72 md:text-base lg:h-16 md:w-80 md:h-14 lg:w-96"
+              className="flex w-64 h-10 px-3 py-2 text-sm text-center rounded-lg lg:text-base sm:mx-auto sm:text-xs sm:h-9 sm:w-72 md:text-base lg:h-16 md:w-80 md:h-14 lg:w-96 focus:ring-blue-slate-400 focus:outline focus:outline-slate-400"
               placeholder="What are you looking for?"
               onKeyPress={searchKeyHandler}
             />
           </div>
         </div>
 
-        <div>
+        <div className="xl:mt-3 md:mt-4 lg:mt-0">
           <img
-            className="h-20 xl:h-80 lg:h-72 sm:h-40 md:w-72 lg:w-80 md:h-60"
+            className="object-contain h-20 xl:h-80 lg:h-72 sm:h-40 md:w-56 lg:w-80 md:h-60"
             src={shopper3}
             alt="pic"
           />
@@ -112,7 +118,7 @@ const LandingPage = () => {
               className="sm:flex sm:gap-2 sm:hover:bg-gray-300"
             >
               <img
-                className="w-16 h-16 md:w-12 md:h-12"
+                className="object-contain w-16 h-16 md:w-12 md:h-12"
                 src={vehicle}
                 alt="pic"
               />
@@ -125,7 +131,7 @@ const LandingPage = () => {
               className="sm:flex sm:gap-2 sm:hover:bg-gray-300"
             >
               <img
-                className="w-16 h-16 md:w-12 md:h-12"
+                className="object-contain w-16 h-16 md:w-12 md:h-12"
                 src={electronics}
                 alt="pic"
               />
@@ -138,7 +144,7 @@ const LandingPage = () => {
               className="sm:flex sm:gap-2 sm:hover:bg-gray-300"
             >
               <img
-                className="w-16 h-16 md:w-12 md:h-12"
+                className="object-contain w-16 h-16 md:w-12 md:h-12"
                 src={clothing}
                 alt="pic"
               />
@@ -151,7 +157,7 @@ const LandingPage = () => {
               className="sm:flex sm:gap-2 sm:hover:bg-gray-300"
             >
               <img
-                className="w-16 h-16 md:w-12 md:h-12"
+                className="object-contain w-16 h-16 md:w-12 md:h-12"
                 src={homeFurniture}
                 alt="pic"
               />
@@ -163,7 +169,11 @@ const LandingPage = () => {
               }}
               className="sm:flex sm:gap-2 sm:hover:bg-gray-300"
             >
-              <img className="w-16 h-16 md:w-12 md:h-12" src={Gym} alt="pic" />
+              <img
+                className="object-contain w-16 h-16 md:w-12 md:h-12"
+                src={Gym}
+                alt="pic"
+              />
               <span className="my-auto md:text-base">Gym Equipments</span>
             </div>
           </div>

@@ -6,8 +6,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { SignActions } from "../store/SignIn-slice";
 import { ErrorAction } from "../store/Error-Slice";
 import { NotificationActions } from "../store/Notification-Slice";
+import { Link } from "react-router-dom";
+import shopping20 from "../img/shopping20.webp";
 
-import Spinner from "../utils/SpinnerLoading";
+import Spinner from "../header/Spinner";
 import Cookies from "js-cookie";
 import useHttp from "../hooks/Use-Http";
 import axios from "axios";
@@ -41,11 +43,16 @@ const UserSignIn = () => {
       try {
         Req = await axios({
           method: "GET",
-          url: `http://localhost:8000/api/meals/getnotification/${user.theUser.id}`,
+          url: `${
+            process.env.NODE_ENV === "production"
+              ? "https://gabaa.herokuapp.com/api/"
+              : "http://localhost:8000/api/"
+          }meals/getnotification/${user.theUser.id}`,
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },
         });
       } catch (err) {
         console.log(err.response.data.message);
+
         dispatch(
           ErrorAction.setError({ ErrorMessage: err.response.data.message })
         );
@@ -71,6 +78,9 @@ const UserSignIn = () => {
           userImage: user.theUser.image,
           userName: user.theUser.userName,
           userEmail: user.theUser.email,
+          phone: user.theUser.phone,
+          joined: user.theUser.createdAt,
+          address: user.theUser.address,
         })
       );
 
@@ -81,6 +91,8 @@ const UserSignIn = () => {
       setIsLoading(false);
 
       history.push("/userpage");
+    } else {
+      history.push("/signin");
     }
   };
 
@@ -89,12 +101,17 @@ const UserSignIn = () => {
     e.preventDefault();
     const email = inputEmail.current.value;
     const password = inputPassword.current.value;
-
+    console.log(process.env.NODE_ENV);
     sendRequest(
       {
         method: "POST",
-        url: "http://localhost:8000/api/users/login",
+        url: `${
+          process.env.NODE_ENV === "production"
+            ? "https://gabaa.herokuapp.com/api/"
+            : "http://localhost:8000/api/"
+        }users/login`,
         data: { email, password },
+        pageTo: "signin",
       },
       applyData
     );
@@ -103,59 +120,61 @@ const UserSignIn = () => {
   return (
     <Fragment>
       {isError && <ErrorModal />}
-      <div
-        className={`grid min-h-screen debug-screens bg-gradient-to-r from-slate-700 via-blue-500 to-black ${
-          isLoading ? "animate-pulse" : ""
-        }`}
-      >
-        <div className="p-2 mx-auto sm:w-[50%] xl:my-auto mt-20 mb-3 border  h-80 lg:w-[40%] xl:w-[35%]  w-[85%] md:w-[50%] md:h-96 rounded-xl">
+
+      <div className={`grid min-h-screen debug-screens `}>
+        <div className="p-2 mx-auto sm:w-[60%]  mt-20 mb-3 lg:mt-24 xl:mt-32   h-96 lg:w-[40%] xl:w-[35%]  w-[85%] md:w-[50%] md:h-96 rounded-xl shadow-2xl">
           <div className="py-3 mt-4 text-center md:py-5">
-            <span className="text-xl text-white md:text-2xl">Welcome to </span>{" "}
-            <span className="text-xl text-green-400 md:text-2xl ">
-              Gabaa Auction
+            <span className="font-mono text-xl font-bold text-green-800 md:text-2xl">
+              WELCOME TO{" "}
+            </span>{" "}
+            <span className="font-mono text-xl font-bold text-green-800 md:text-2xl ">
+              GABAA E-COMM
             </span>
           </div>
 
-          <div className="grid w-2/3 grid-flow-row ml-6">
+          <div className="grid w-[80%] lg:w-[75%] grid-flow-row mt-4 ml-6">
             <div className=" md:mt-2">
-              <label className="text-white ">Email address</label>
+              <label className="font-semibold text-green-800">
+                Email address
+              </label>
             </div>
 
             <div>
-              <UserInputComp
+              <input
+                className="w-full px-3 py-2 mt-1 bg-transparent border border-gray-300 rounded-md lg:py-3 text-cyan-900 md:mt-2 focus:ring-1 focus:indigo-500"
+                placeholder="Email"
                 ref={inputEmail}
-                input={{
-                  type: "email",
-                  placeholder: "Email",
-                  className:
-                    "px-3 py-1 md:py-2 rounded-md md:mt-2  mt-1 border w-full border border-gray-300 bg-transparent text-gray-100",
-                }}
+                type="email"
               />
             </div>
 
-            <div className=" md:mt-2">
-              <label className="text-white ">Password</label>
+            <div className="mt-3 md:mt-2">
+              <label className="font-semibold text-green-800">Password</label>
             </div>
             <div>
-              <UserInputComp
+              <input
+                className="w-full px-3 py-2 mt-1 bg-transparent border border-gray-300 rounded-md lg:py-3 text-cyan-900 md:mt-2 focus:ring-1 focus:indigo-500"
+                placeholder="Password"
                 ref={inputPassword}
-                input={{
-                  type: "password",
-                  placeholder: "Password",
-                  className:
-                    "px-3 py-1 md:py-2 md:mt-2 rounded-md border mt-1 w-full border border-gray-300 focus:ring-1 focus:indigo-500 bg-transparent text-gray-100",
-                }}
+                type="password"
               />
             </div>
 
-            <div className=" md:mt-6">
+            <div className="flex-row mt-2 md:mt-6">
               <button
                 onClick={submitHandler}
                 type="submit"
-                className="px-8 py-1 mt-4 mb-3 ml-10 text-lg text-white bg-transparent border rounded-lg md:ml-1 hover:bg-gray-700 "
+                className="w-32 py-1 mt-4 mb-3 text-lg text-white border rounded-lg sm:px-8 bg-cyan-800 md:ml-1 hover:bg-gray-700"
               >
                 Sign In
               </button>
+
+              <Link
+                className="ml-2 text-green-800 sm:text-base lg:text-lg hover:text-red-300"
+                to="/forgotPassword"
+              >
+                Forgot Password ?
+              </Link>
             </div>
           </div>
         </div>

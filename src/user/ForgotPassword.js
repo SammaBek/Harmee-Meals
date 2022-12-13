@@ -16,7 +16,11 @@ const ForgotPassword = () => {
     try {
       await axios({
         method: "PATCH",
-        url: "http://localhost:8000/api/users/forgotPassword",
+        url: `${
+          process.env.NODE_ENV === "production"
+            ? process.env.REACT_APP_BACKEND_URL
+            : "http://localhost:8000/api"
+        }/users/forgotPassword`,
         data: { email: enteredEmail },
       });
       reset();
@@ -29,30 +33,36 @@ const ForgotPassword = () => {
 
   return (
     <form onSubmit={formHandler}>
-      <div className="grid justify-center w-1/3 grid-flow-row mx-auto mt-20 rounded-lg shadow-xl h-4/6 bg-blue-50">
-        <h1 className="mt-3 text-4xl font-bold text-cyan-800">
-          Forgot Password
-        </h1>
-        <div className="grid max-w-sm grid-flow-col mt-10">
-          <label className="my-auto text-lg ">Email</label>
+      <div className="grid  w-[90%] sm:w-[65%] md:w-[55%] lg:w-[45%]  mx-auto mt-20 xl:mt-24 rounded-lg shadow-2xl h-72 sm:h-72 lg:h-80 ">
+        <div>
+          <h1 className="mt-8 text-2xl font-bold text-center sm:text-3xl text-cyan-900">
+            Forgot Password
+          </h1>
+        </div>
+
+        <div className="w-[100%] mx-auto  mt-7 sm:mt-4">
+          {/* <label className="my-auto text-lg ">Email</label> */}
           <input
             type="email"
             value={enteredEmail}
             placeholder="Email"
-            className={`px-5 py-2 rounded-lg w-50 ml-9 ${
-              focusInp && !enteredEmail ? "bg-red-100" : ""
+            className={`px-3 py-2.5 lg:py-3 bg-transparent focus:ring-blue-slate-400 focus:outline focus:outline-slate-400 flex mx-auto rounded-lg w-[90%] sm:w-[60%] text-gray-500 text-sm sm:text-base border ${
+              focusInp && !enteredEmail ? "border-red-200" : ""
             }`}
             onChange={clickHandler}
             onBlur={handleFocus}
           />
         </div>
-        <button
-          className={`px-2 py-1 mt-5 mb-5 text-xl text-white bg-blue-500 rounded-lg shadow-lg hover:bg-blue-700 ${
-            !enteredEmail ? "cursor-not-allowed opacity-50" : ""
-          } `}
-        >
-          Send
-        </button>
+
+        <div className="mx-auto ">
+          <button
+            className={` px-20 py-1 lg:py-1.5 mt-5 sm:mt-3  mb-5 text-xl text-white bg-cyan-800 rounded-lg shadow-lg hover:bg-cyan-900 ${
+              !enteredEmail ? "cursor-not-allowed opacity-50" : ""
+            } `}
+          >
+            Send
+          </button>
+        </div>
       </div>
     </form>
   );

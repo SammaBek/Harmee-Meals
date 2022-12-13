@@ -7,6 +7,7 @@ import {
   useContext,
 } from "react";
 import MealItems from "./MealItems";
+import SearchResult from "../products/SearchResult";
 
 import ErrorModal from "../modal/ErrorModal";
 
@@ -35,7 +36,11 @@ const MealsDemo = (props) => {
         // ${localStorage.getItem("token")}
         const Req = await axios({
           method: "GET",
-          url: `http://localhost:8000/api/meals/myproducts/${userId}`,
+          url: `${
+            process.env.NODE_ENV === "production"
+              ? process.env.REACT_APP_BACKEND_URL
+              : "http://localhost:8000/api"
+          }/meals/myproducts/${userId}`,
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },
         });
         console.log(Req);
@@ -56,7 +61,7 @@ const MealsDemo = (props) => {
     <section>
       {isLoading && <Spinners />}
       {isError && <ErrorModal />}
-      <div className="grid h-screen overflow-y-auto lg:grid-cols-2 w-[94%] mx-auto md:ml-2 md:w-[80%] lg:w-[98%]">
+      <div className="gap-2 h-screen grid-flow-row overflow-y-auto  w-[94%] mx-auto md:ml-2 md:w-[80%] lg:w-[98%]">
         {!isLoading &&
           Meals.map((item) => {
             return (

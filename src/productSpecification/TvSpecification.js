@@ -144,7 +144,7 @@ const TvSpecification = (props) => {
             isClearable
             defaultValue={{
               value: `${props.editTV ? props.editTV.tvBrand : null}`,
-              label: `${props.editTV ? props.editTV.tvBrand : null}`,
+              label: `${props.editTV ? props.editTV.tvBrand : "select"}`,
             }}
           />
         </div>
@@ -156,9 +156,7 @@ const TvSpecification = (props) => {
           <input
             onChange={modelHandler}
             className="w-40 p-1 ml-0 text-sm border rounded-md md:w-48 h-9 border-slate-300"
-            defaultValue={`${
-              props.editTV.tvModel ? props.editTV.tvModel : null
-            }`}
+            defaultValue={props.editTV ? props.editTV.tvModel : null}
           />
         </div>
       </div>
@@ -173,7 +171,7 @@ const TvSpecification = (props) => {
             isClearable
             defaultValue={{
               value: `${props.editTV ? props.editTV.tvScreenSize : null}`,
-              label: `${props.editTV ? props.editTV.tvScreenSize : null}`,
+              label: `${props.editTV ? props.editTV.tvScreenSize : "select"}`,
             }}
           />
         </div>
@@ -189,7 +187,7 @@ const TvSpecification = (props) => {
             isClearable
             defaultValue={{
               value: `${props.editTV ? props.editTV.tvResolution : null}`,
-              label: `${props.editTV ? props.editTV.tvResolution : null}`,
+              label: `${props.editTV ? props.editTV.tvResolution : "select"}`,
             }}
           />
         </div>

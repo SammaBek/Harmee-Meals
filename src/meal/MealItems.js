@@ -88,16 +88,18 @@ const MealItems = (props) => {
 
       {del && <DeleteProduct cancelDel={cancelDelHandler} />}
 
-      <div className="grid sm:flex sm:w-[95%] sm:h-52 md:h-60 xl:w-[95%] gap-2 md:py-2 py-1 mt-5 mb-1 md:mb-3 md:ml-2 rounded-lg shadow-2xl xl:h-72 border ">
-        <div className=" sm:w-[85%] md:w-[70%] lg:w-[93%]">
-          <img
-            className="rounded-md xl:w-[95%] sm:h-44 sm:w-[96%] md:w-72 lg:w-[100%]  h-40 mx-auto sm:ml-0 xl:h-56 xl:ml-1 mb-1 md:mb-0"
-            src={`http://localhost:8000/${props.image}`}
-            alt="pic"
-          ></img>
+      <div className="grid h-auto gap-2 py-2 border sm:flex sm:gap-3 lg:ml-3  lg:w-[70%] mt-2">
+        <div className="  w-[50%] lg:w-[45%] mx-auto sm:ml-0">
+          <div className="grid mx-auto mt-2 aspect-w-3 aspect-h-2 sm:ml-2">
+            <img
+              className="object-cover rounded-md"
+              src={`${process.env.REACT_APP_AWS_S3_BUCKET}/${props.image[0]}`}
+              alt="pic"
+            ></img>
+          </div>
         </div>
 
-        <div className="grid grid-flow-row gap-1 text-xs lg:text-sm md:text-base xl:w-[100%] sm:w-[100%] ml-2 md:ml-0">
+        <div className="grid gap-1 text-xs lg:text-sm md:text-base xl:w-[100%] lg:w-[80%] sm:w-[100%] ml-2  mt-2">
           <div className="flex gap-5 border border-t-0 border-l-0 border-r-0">
             <div>
               <label className="font-serif sm:font-bold ">Name:</label>
@@ -125,14 +127,6 @@ const MealItems = (props) => {
 
           <div className="flex gap-5 border border-t-0 border-l-0 border-r-0">
             <div>
-              <label className="font-serif sm:font-bold">Status:</label>
-            </div>
-
-            <div>{updatedData ? updatedData.status : props.status}</div>
-          </div>
-
-          <div className="flex gap-5 border border-t-0 border-l-0 border-r-0">
-            <div>
               <label className="font-serif sm:font-bold ">Catagory:</label>
             </div>
 
@@ -146,7 +140,7 @@ const MealItems = (props) => {
 
           <div>{Moment(props.deadline).format("LLLL")}</div>
         </div> */}
-          <div className="flex gap-1 ">
+          <div className="flex gap-1 mx-auto">
             {!showButton && (
               <div className="flex gap-4 ">
                 <button
