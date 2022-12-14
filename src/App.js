@@ -72,7 +72,7 @@ function App() {
       `${
         process.env.NODE_ENV === "development"
           ? "http://localhost:8000"
-          : "https://gabaa.herokuapp.com/"
+          : "https://gabaaecom.onrender.com/api/meals"
       }`
     );
     if (userId) {

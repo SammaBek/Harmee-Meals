@@ -57,7 +57,7 @@ const Header = (props) => {
           method: "POST",
           url: `${
             process.env.NODE_ENV === "production"
-              ? "https://gabaa.herokuapp.com/api/"
+              ? "https://gabaaecom.onrender.com/api/"
               : "http://localhost:8000/api/"
           }users/getChats`,
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },

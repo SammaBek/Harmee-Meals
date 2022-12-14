@@ -45,7 +45,7 @@ const UserSignIn = () => {
           method: "GET",
           url: `${
             process.env.NODE_ENV === "production"
-              ? "https://gabaa.herokuapp.com/api/"
+              ? "https://gabaaecom.onrender.com/api/"
               : "http://localhost:8000/api/"
           }meals/getnotification/${user.theUser.id}`,
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },
@@ -107,7 +107,7 @@ const UserSignIn = () => {
         method: "POST",
         url: `${
           process.env.NODE_ENV === "production"
-            ? "https://gabaa.herokuapp.com/api/"
+            ? "https://gabaaecom.onrender.com/api/"
             : "http://localhost:8000/api/"
         }users/login`,
         data: { email, password },
