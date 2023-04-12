@@ -153,16 +153,16 @@ const EditProduct = (props) => {
               />
             </div>
 
-            <div className="flex ">
+            <div className="">
               <button
                 onClick={saveHandler}
-                className="w-16 h-8 mt-2 mb-3 ml-10 bg-green-400 rounded-lg shadow-2xl"
+                className="px-12 py-2 mt-2 mb-3 ml-10 text-gray-300 rounded-lg shadow-2xl bg-cyan-800 hover:bg-cyan-900"
               >
                 Save
               </button>
               <button
                 onClick={cancelHandler}
-                className="w-16 h-8 mt-2 mb-3 ml-10 bg-red-400 rounded-lg shadow-2xl"
+                className="px-12 py-2 mt-2 mb-3 ml-10 text-gray-300 bg-red-800 rounded-lg shadow-2xl hover:bg-red-900"
               >
                 Cancel
               </button>

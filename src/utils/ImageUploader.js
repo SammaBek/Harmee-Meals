@@ -4,8 +4,9 @@ import img from "../img/img.jpeg";
 const ImageUploader = (props) => {
   const filePickerRef = useRef();
   const [file, setFile] = useState("");
-  const [isValid, setIsValid] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [isValid, setIsValid] = useState(false);
+
   let pickedFile, valid;
   console.log(props.type);
   useEffect(() => {
@@ -34,8 +35,12 @@ const ImageUploader = (props) => {
       setIsValid(false);
       valid = false;
     }
+    if (props.changeProPic) {
+      props.onGetImage(pickedFile, valid, imageUrl);
+    } else {
+      props.onGetImage(pickedFile, valid);
+    }
 
-    props.onGetImage(pickedFile, valid);
     console.log(pickedFile, valid);
   };
 
@@ -55,21 +60,27 @@ const ImageUploader = (props) => {
           multiple
         />
 
-        <img
-          alt="preview"
-          src={`${imageUrl ? imageUrl : props.img}`}
-          className={`p-1 border object-cover ${
-            imageUrl ? `${props.cssClass}` : `${props.cssClass}`
-          }`}
-        />
+        {!props.changeProPic && (
+          <img
+            alt="preview"
+            src={`${imageUrl ? imageUrl : props.img}`}
+            className={`p-1 border object-cover ${
+              imageUrl ? `${props.cssClass}` : `${props.cssClass}`
+            }`}
+          />
+        )}
 
         <div className="mx-auto">
           <button
             type="button"
             onClick={pickImageHandler}
-            className="w-24 mb-5 font-mono text-white bg-green-700 rounded-lg h-7 sm:w-24 lg:text-base sm:text-sm hover:bg-blue-600"
+            className={` ${
+              props.changeProPic
+                ? "w-36"
+                : "w-24 mb-5 font-mono text-white bg-green-700 rounded-lg h-7 sm:w-24 lg:text-base sm:text-sm hover:bg-blue-600"
+            }    `}
           >
-            Add Image
+            {props.changeProPic ? "Change Profile" : "Add Image"}
           </button>
         </div>
       </div>

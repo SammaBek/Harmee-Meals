@@ -41,7 +41,9 @@ const AddMeal = () => {
   const detailInput = useRef();
   const priceInput = useRef();
   const inputDeadline = useRef();
-  const [images, setImage] = useState([]);
+  const [image1, setImage1] = useState();
+  const [image2, setImage2] = useState();
+  const [image3, setImage3] = useState();
   const [status, setStatus] = useState();
   const [catagories, setCatagories] = useState("HomeAppliance");
 
@@ -52,7 +54,11 @@ const AddMeal = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
 
-    console.log(images);
+    let images = [];
+
+    const form = new FormData();
+
+    console.log(image1, image2, image3);
 
     if (
       !productInput.current.value ||
@@ -70,18 +76,23 @@ const AddMeal = () => {
       const detail = detailInput.current.value;
       const price = priceInput.current.value;
 
-      const form = new FormData();
-
       form.append("name", productInput.current.value);
       form.append("description", detailInput.current.value);
       form.append("price", priceInput.current.value);
       form.append("productCatagory", catagories);
 
-      for (let i = 0; i < images.length; i++) {
-        form.append("images", images[i]);
+      if (image1 || image2 || image3) {
+        if (image1) images.push(image1);
+        if (image2) images.push(image2);
+        if (image3) images.push(image3);
       }
 
       form.append("status", status);
+      if (images.length > 0) {
+        for (let i = 0; i < images.length; i++) {
+          form.append("images", images[i]);
+        }
+      }
 
       for (var key in specs) {
         form.append(key, specs[key]);
@@ -110,12 +121,21 @@ const AddMeal = () => {
     history.push("/userpage");
   };
 
-  const getImage = (imgs, valid) => {
+  const getImage1 = (imgs, valid) => {
     console.log(imgs, valid);
 
-    setImage((oldArray) => [...oldArray, imgs]);
+    setImage1(imgs);
   };
+  const getImage2 = (imgs, valid) => {
+    console.log(imgs, valid);
 
+    setImage2(imgs);
+  };
+  const getImage3 = (imgs, valid) => {
+    console.log(imgs, valid);
+
+    setImage3(imgs);
+  };
   const listHandler = (event) => {
     console.log(event);
     if (event.value) {
@@ -138,7 +158,7 @@ const AddMeal = () => {
       {isError && <ErrorModal />}
       <form onSubmit={submitHandler}>
         <div className="w-full gap-5 mt-4 sm:mt-10 sm:flex">
-          <div className="grid w-1/3 grid-flow-row gap-2 ml-6 sm:gap-2 sm:h-[90%]  sm:w-[50%]">
+          <div className="grid grid-flow-row gap-2 ml-6 sm:gap-2 sm:h-[90%]  sm:w-[55%] md:w-[60%] lg:w-[60%]">
             <h1 className="mt-5 text-lg text-center sm:text-xl md:mt-10">
               ADD YOUR PRODUCT
             </h1>
@@ -250,33 +270,33 @@ const AddMeal = () => {
               </div>
             </div>
 
-            <div className="hidden w-full overflow-x-auto sm:grid sm:grid-flow-col sm:gap-5 ">
-              <div className=" lg:w-44">
+            <div className=" grid-flow-col grid gap-5 overflow-x-auto w-[100%] ">
+              <div className=" lg:w-44 w-44">
                 <ImageUploader
-                  cssClass="rounded-lg w-36 h-36 md:w-24 md:h-24 lg:w-44 lg:h-36"
+                  cssClass="rounded-lg w-44 h-36 md:w-44 md:h-36 lg:w-44 lg:h-36"
                   cssClassAfter="rounded-lg w-52 h-52 md:w-24 md:h-24 lg:w-52 lg:h-52"
                   img={img2}
-                  onGetImage={getImage}
+                  onGetImage={getImage1}
                   type="multiple"
                 />
               </div>
 
-              <div className=" lg:w-44">
+              <div className=" lg:w-44 w-44">
                 <ImageUploader
-                  cssClass="rounded-lg w-36 h-36 md:w-24 md:h-24 lg:w-44 lg:h-36"
+                  cssClass="rounded-lg w-44 h-36 md:w-44 md:h-36 lg:w-44 lg:h-36"
                   cssClassAfter="rounded-lg w-52 h-52 md:w-24 md:h-24 lg:w-52 lg:h-52"
                   img={img2}
-                  onGetImage={getImage}
+                  onGetImage={getImage2}
                   type="multiple"
                 />
               </div>
 
-              <div className="lg:w-44">
+              <div className="lg:w-44 w-44">
                 <ImageUploader
-                  cssClass="rounded-lg w-36 h-36 md:w-24 md:h-24 lg:w-44 lg:h-36"
+                  cssClass="rounded-lg w-44 h-36 md:w-44 md:h-36 lg:w-44 lg:h-36"
                   cssClassAfter="rounded-lg w-52 h-52 md:w-24 md:h-24 lg:w-52 lg:h-52"
                   img={img2}
-                  onGetImage={getImage}
+                  onGetImage={getImage3}
                   type="multiple"
                 />
               </div>
@@ -289,7 +309,7 @@ const AddMeal = () => {
             </div>
           </div>
 
-          <div className="w-4/6 mt-5 mb-5 sm:mt-16 sm:ml-3 ">
+          <div className="w-4/6 mt-5 mb-5 sm:mt-16 sm:ml-2 ">
             <div className="flex gap-3 mb-3 ml-6 sm:ml-0">
               <div className="transform translate-y-1 lg:text-lg">
                 Catagory*
@@ -311,15 +331,6 @@ const AddMeal = () => {
                 <VehiclesSpecification getData={getSpec} />
               )}
             </div>
-          </div>
-
-          <div className=" sm:hidden">
-            <ImageUploader
-              cssClass="rounded-lg w-36 h-36 md:w-24 md:h-24 lg:w-36 lg:h-36"
-              cssClassAfter="rounded-lg w-52 h-52 md:w-24 md:h-24 lg:w-52 lg:h-52"
-              img={img2}
-              onGetImage={getImage}
-            />
           </div>
 
           <div className="mb-5 sm:hidden">

@@ -8,8 +8,10 @@ import { SignActions } from "../store/SignIn-slice";
 import MessageDetail from "./MessageDetail";
 import ApproveBid from "./ApproveBid";
 import { MessageActions } from "../store/Message-Slice";
+import ErrorModal from "../modal/ErrorModal";
 
 import { Fragment } from "react";
+import { ErrorAction } from "../store/Error-Slice";
 const Message = () => {
   const styles = useSpring({
     from: { x: -200, y: 30 },
@@ -25,6 +27,7 @@ const Message = () => {
   const updateMessage = useSelector((state) => state.message.updateMessage);
   const dispatch = useDispatch();
   const showMessage = useSelector((state) => state.message.showMessage);
+  const isError = useSelector((state) => state.error.isError);
   const [message, setMessage] = useState([]);
   console.log(myUser);
 
@@ -50,6 +53,11 @@ const Message = () => {
         setMessage(Req.data.arr);
       } catch (err) {
         console.log(err.response.data.message);
+        dispatch(
+          ErrorAction.setError({
+            errorMessage: "You are Not Authorized, Sign in",
+          })
+        );
       }
     };
 
@@ -69,8 +77,9 @@ const Message = () => {
   };
   return (
     <Fragment>
-      <div className="fixed inset-0 z-50 bg-gray-800 bg-opacity-70">
-        <div className="  bg-gray-100 rounded-lg w-[83%] sm:w-[60%] lg:w-[37%] h-[60%] xl:h-[55%] mx-auto mt-14">
+      {isError && <ErrorModal />}
+      <div className="fixed inset-0 z-40 bg-black bg-opacity-20">
+        <div className="  bg-gray-100 rounded-lg w-[83%] sm:w-[60%] md:w-[35%] lg:w-[30%] h-auto xl:h-[55%]  mt-14 absolute right-0 bottom-5">
           <div className="h-6 rounded-lg bg-slate-700">
             <div className="flex gap-2">
               <div>
@@ -111,7 +120,7 @@ const Message = () => {
           </div>
           <div className="ml-4 text-xl text-gray-600">Messenger</div>
 
-          <div className="h-56 overflow-visible overflow-y-auto lg:h-[90%]">
+          <div className="py-2 overflow-visible overflow-y-auto h-72 lg:h-96">
             {message &&
               message.map((msg) => {
                 let newMessage;
@@ -123,7 +132,11 @@ const Message = () => {
                 }
                 return (
                   <div className="p-2 ">
-                    <MessageDetail msg={msg} newMessage={newMessage} />
+                    <MessageDetail
+                      key={msg.image}
+                      msg={msg}
+                      newMessage={newMessage}
+                    />
                   </div>
                 );
               })}

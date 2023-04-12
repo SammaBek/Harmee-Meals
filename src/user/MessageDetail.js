@@ -16,7 +16,9 @@ const MessageDetail = (props) => {
         onClick={detailHandler}
         key={props.msg.createdAt}
         className={`flex gap-4 py-1 hover:bg-slate-300 hover:rounded-lg ${
-          !props.msg.seen ? `bg-slate-200 rounded-lg` : "rounded-lg"
+          !props.msg.seen && !props.msg.sender === myUser
+            ? `bg-slate-200 rounded-lg`
+            : "rounded-lg"
         } `}
       >
         <div className="my-auto ">

@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import shopping14 from "../img/shopping14.jpeg";
+import shopping14 from "../img/shopping14.webp";
 import { useSelector } from "react-redux";
 const ResetPassword = (props) => {
   const [reveal, setReveal] = useState("password");

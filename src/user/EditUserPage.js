@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { useSelector } from "react-redux";
-import shopping13 from "../img/shopping13.jpeg";
+import shopping13 from "../img/shopping13.webp";
 const EditUserPage = (props) => {
   const isLoggedIn = useSelector((state) => state.sign.isLoggedIn);
 

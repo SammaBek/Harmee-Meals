@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { SignActions } from "../store/SignIn-slice";
 import ImageUploader from "../utils/ImageUploader";
-import img1 from "../img/img.jpeg";
-import img2 from "../img/shop.png";
+import img1 from "../img/img.webp";
+import img2 from "../img/shop.webp";
 import { ErrorAction } from "../store/Error-Slice";
 
 const UserSignUp = () => {

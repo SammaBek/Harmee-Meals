@@ -2,10 +2,13 @@ import { useState, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { SignActions } from "../store/SignIn-slice";
+
+import ProductFullPic from "./ProductFullPic";
 const SearchResult = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const location = useLocation();
+  const [showFullPic, setShowFullPic] = useState(false);
 
   const [img, setImg] = useState(props.image[0]);
 
@@ -15,6 +18,10 @@ const SearchResult = (props) => {
       dispatch(SignActions.setBid({ prodId: props.prod.id }));
       history.push("/specificProduct");
     }
+  };
+
+  const fullPicHandler = () => {
+    setShowFullPic((prev) => !prev);
   };
   return (
     // <div className="flex h-auto gap-2">
@@ -69,6 +76,9 @@ const SearchResult = (props) => {
     // </div>
 
     <Fragment>
+      {showFullPic && (
+        <ProductFullPic image={img} onSetFullPic={setShowFullPic} />
+      )}
       <div
         onClick={detailHandler}
         className="flex h-auto border rounded-lg sm:py-2 "
@@ -84,9 +94,12 @@ const SearchResult = (props) => {
         >
           <div className="ml-1 aspect-w-5 aspect-h-4 sm:aspect-w-3 sm:aspect-h-2">
             <img
+              onClick={fullPicHandler}
               className="object-cover rounded-lg"
               src={`${process.env.REACT_APP_AWS_S3_BUCKET}/${img}`}
+              srcSet={`${process.env.REACT_APP_IMAGE_KIT_URL}/${img}?tr=w-300, h-300,${process.env.REACT_APP_IMAGE_KIT_URL}/${img}?tr=w-768,h-768,${process.env.REACT_APP_IMAGE_KIT_URL}/${img}?tr=w-1280, h-1280`}
               alt="pic"
+              sizes="(max-width: 300px) 300px, (max-width: 768px) 768px, 1280px"
             />
           </div>
         </div>
@@ -113,8 +126,10 @@ const SearchResult = (props) => {
 
               return (
                 <img
-                  className="object-cover w-12 h-12 rounded-full sm:w-14 sm:h-14"
+                  className="object-cover w-12 h-12 border-2 border-gray-600 rounded-full sm:w-14 sm:h-14"
+                  srcSet={`${process.env.REACT_APP_IMAGE_KIT_URL}/tr:w-300,h-300/${element}, ${process.env.REACT_APP_IMAGE_KIT_URL}/tr:w-768,h-768/${element} ,${process.env.REACT_APP_IMAGE_KIT_URL}/tr:w-1280,h-1280/${element},`}
                   src={`${process.env.REACT_APP_AWS_S3_BUCKET}/${element}`}
+                  sizes="(max-width: 300px) 300px, (max-width: 768px) 768px, 1280px"
                   alt="pic"
                   onClick={() => {
                     console.log(element);

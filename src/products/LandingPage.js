@@ -1,10 +1,10 @@
-import shopper1 from "../img/shopper1.png";
-import shopper3 from "../img/shopper3.png";
-import vehicle from "../img/vehicle.png";
-import electronics from "../img/electronics.png";
-import clothing from "../img/Clothing.png";
-import homeFurniture from "../img/homeFurniture.png";
-import Gym from "../img/GymEquipment.png";
+import shopper1 from "../img/shopper1.webp";
+import shopper3 from "../img/shopper3.webp";
+import vehicle from "../img/vehicle.webp";
+import electronics from "../img/electronics.webp";
+import clothing from "../img/Clothing.webp";
+import homeFurniture from "../img/homeFurniture.webp";
+import Gym from "../img/GymEquipment.webp";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorAction } from "../store/Error-Slice";
@@ -24,8 +24,6 @@ const LandingPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const search = useRef();
   const isError = useSelector((state) => state.error.isError);
-
-  const ss = "sam";
 
   useEffect(() => {
     const getData = async () => {
@@ -154,14 +152,14 @@ const LandingPage = () => {
               onClick={() => {
                 filterHandler("HomeFurniture");
               }}
-              className="sm:flex sm:gap-2 sm:hover:bg-gray-300"
+              className=" sm:flex sm:gap-2 sm:hover:bg-gray-300"
             >
               <img
                 className="object-contain w-16 h-16 md:w-12 md:h-12"
                 src={homeFurniture}
                 alt="pic"
               />
-              <span className="my-auto md:text-base">Home Furnitures</span>
+              <span className="my-auto md:text-base">Furnitures</span>
             </div>
             <div
               onClick={() => {
@@ -174,11 +172,11 @@ const LandingPage = () => {
                 src={Gym}
                 alt="pic"
               />
-              <span className="my-auto md:text-base">Gym Equipments</span>
+              <span className="my-auto md:text-base">Gym</span>
             </div>
           </div>
         </div>
-        <div className="grid  md:w-[75%] lg:w-[80%] sm:w-[75%] p-1 xl:w-[75%] h-screen sm:grid-cols-3 gap-1 overflow-y-auto  xl:p-2 mt-3 sm:mt-0 grid-flow-row w-[100%]">
+        <div className="grid  md:w-[75%] lg:w-[80%] sm:w-[75%] p-1 xl:w-[75%] max-h-screen sm:grid-cols-3 gap-1 overflow-y-auto  xl:p-2 mt-3 sm:mt-0 grid-flow-row w-[100%]">
           {products.map((p) => {
             return <ProductDetail key={p.id} prod={p} />;
           })}

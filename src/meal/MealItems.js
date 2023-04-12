@@ -94,7 +94,9 @@ const MealItems = (props) => {
             <img
               className="object-cover rounded-md"
               src={`${process.env.REACT_APP_AWS_S3_BUCKET}/${props.image[0]}`}
+              srcSet={`${process.env.REACT_APP_IMAGE_KIT_URL}/${props.image[0]}?tr=w-300, h-300,${process.env.REACT_APP_IMAGE_KIT_URL}/${props.image[0]}?tr=w-768,h-768,${process.env.REACT_APP_IMAGE_KIT_URL}/${props.image[0]}?tr=w-1280, h-1280`}
               alt="pic"
+              sizes="(max-width: 300px) 300px, (max-width: 768px) 768px, 1280px"
             ></img>
           </div>
         </div>

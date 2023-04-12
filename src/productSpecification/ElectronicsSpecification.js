@@ -6,6 +6,7 @@ import LaptopSpecification from "./LaptopSpecification";
 import { useSelector } from "react-redux";
 const ElectronicsSpecification = (props) => {
   console.log(props.type);
+  console.log(props.editSpecs);
 
   let count;
   const [elecType, setElecType] = useState(
@@ -48,7 +49,7 @@ const ElectronicsSpecification = (props) => {
       className={`grid grid-flow-row   ${
         props.type === "filter"
           ? "w-80 sm:w-80"
-          : " border  shadow-2xl w-80 sm:w-[90%] p-3 sm:p-4 md:px-8 md:w-[85%] lg:w-[80%] lg:px-10 xl:px-14 xl:w-[70%]"
+          : " border  shadow-2xl w-80 sm:w-[95%] p-3 sm:p-4 md:px-8 md:w-[85%] lg:w-[80%] lg:px-10 xl:px-14 xl:w-[70%]"
       } `}
     >
       <div className="mt-2 mb-2 text-base font-bold sm:text-base md:mx-auto md:text-center lg:text-lg">
@@ -71,15 +72,26 @@ const ElectronicsSpecification = (props) => {
                     value: `${
                       props.editSpecs
                         ? props.editSpecs.specs.ElectronicType
-                        : products[0]
+                        : products[0].value
                     }`,
                     label: `${
                       props.editSpecs
                         ? props.editSpecs.specs.ElectronicType
-                        : products[0]
+                        : products[0].label
                     }`,
                   }
-                : ""
+                : {
+                    value: ` ${
+                      props.editSpecs
+                        ? props.editSpecs.specs.ElectronicType
+                        : products[0].value
+                    }`,
+                    label: ` ${
+                      props.editSpecs
+                        ? props.editSpecs.specs.ElectronicType
+                        : products[0].label
+                    } `,
+                  }
             }
           />
         </div>

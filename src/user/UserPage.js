@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { SignActions } from "../store/SignIn-slice";
 import { Link, NavLink, useHistory, useParams, Route } from "react-router-dom";
 import Header from "../header/Header";
-import { useRef, useState, Fragment } from "react";
+import { useRef, useState, Fragment, useEffect } from "react";
 import UserPageNav from "./UserPageNav";
 import useHttp from "../hooks/Use-Http";
 import { useDispatch } from "react-redux";
@@ -13,16 +13,19 @@ import AddMeal from "./AddProduct";
 import { data } from "autoprefixer";
 import Spinners from "../utils/SpinnerLoading";
 import { useLocation } from "react-router-dom";
-import shopping12 from "../img/shopping12.png";
+import shopping12 from "../img/shopping12.webp";
 import Nav from "./Nav";
 import moment from "moment";
+import ImageUploader from "../utils/ImageUploader";
 const UserPage = () => {
   const pid = useParams();
   const { sendRequest } = useHttp();
   const [show, setShow] = useState(false);
 
   let img = useSelector((state) => state.sign.userImage);
+  const [proPicUrl, setProPicUrl] = useState(false);
   const imgs = localStorage.getItem("userImage");
+  const [proPic, setProPic] = useState();
   let userName = useSelector((state) => state.sign.userName);
   let email = useSelector((state) => state.sign.userEmail);
   let phone = useSelector((state) => state.sign.phone);
@@ -118,6 +121,26 @@ const UserPage = () => {
     );
   };
 
+  const getImage = (image, valid, imageUrl) => {
+    setProPic(image);
+    console.log(image);
+    setProPicUrl(imageUrl);
+    console.log(img);
+  };
+
+  useEffect(() => {
+    if (!proPic) {
+      return;
+    }
+
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      setProPicUrl(fileReader.result);
+    };
+
+    fileReader.readAsDataURL(proPic);
+  }, [proPic]);
+
   return (
     <Fragment>
       <div className="grid min-h-screen bg-gradient-to-r from-stone-500 via-slate-400 to-stone-500">
@@ -126,9 +149,7 @@ const UserPage = () => {
             <div className="grid mx-auto">
               <img
                 className="object-cover w-24 h-24 mx-auto mt-3 rounded-full shadow-2xl xl:w-36 xl:h-36 sm:w-28 sm:h-28 "
-                src={`${process.env.REACT_APP_AWS_S3_BUCKET}/${
-                  img ? img : imgs
-                }`}
+                src={proPicUrl}
                 alt="pic"
               ></img>
 
@@ -136,6 +157,7 @@ const UserPage = () => {
                 <p className="ml-2 text-base text-slate-600">{userName}</p>
                 <p className="ml-2 text-base text-slate-600">+{phone}</p>
               </div>
+              <ImageUploader onGetImage={getImage} changeProPic={true} />
             </div>
           </div>
 

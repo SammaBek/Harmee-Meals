@@ -11,6 +11,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { SignActions } from "../store/SignIn-slice";
 import { MessageActions } from "../store/Message-Slice";
+import { ErrorAction } from "../store/Error-Slice";
 
 const ApproveBid = (props) => {
   const { sendRequest } = useHttp();
@@ -59,6 +60,13 @@ const ApproveBid = (props) => {
         setLoading(false);
       } catch (err) {
         console.log(err.response.data.message);
+        dispatch(
+          ErrorAction.setError({
+            errorMessage: "You need to Sign In to continue",
+          })
+        );
+
+        dispatch(ErrorAction.setPageTo({ pageTo: "signin" }));
       }
       // socket.emit("register", userId);
     };
@@ -117,9 +125,9 @@ const ApproveBid = (props) => {
     props.make();
   };
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-70 ">
-      <div className="flex items-center justify-center ">
-        <div className="mt-20 rounded-lg shadow-2xl h-96 borde sm:mt-28 w-[85%] bg-gray-50 sm:w-96 lg:h-96">
+    <div className="fixed inset-0 z-45">
+      <div className="flex items-center justify-center mt-36">
+        <div className="mt-20 rounded-lg shadow-2xl h-96 border sm:mt-28 w-[85%] bg-gray-50 sm:w-96 lg:h-96 absolute right-0 bottom-5">
           <div className="h-6 text-center rounded-lg text-gray-50 bg-slate-700">
             {props.name}
           </div>
